@@ -1,0 +1,17 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+
+
+[packages]
+
+django = "==1.10"
+raven = "*"
+django-rest-swagger = "==2.1.2"
+djangorestframework = "==3.7.7"
