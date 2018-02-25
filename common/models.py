@@ -39,4 +39,39 @@ class CommonModel(models.Model):
         return self.__class__.__name__.lower()
 
 
+class City(CommonModel):
+    """城市"""
 
+    code = models.CharField(u"城市编码", max_length=32)
+    name = models.CharField(u"城市名称", max_length=32)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Subject(CommonModel):
+    """科目"""
+
+    name = models.CharField(u"科目", max_length=16)
+
+    def __unicode__(self):
+        return self.name
+
+
+class BaseLevel(CommonModel):
+    """小学还是初中"""
+
+    name = models.CharField(u"名称", max_length=16)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Level(CommonModel):
+    """年级"""
+
+    base = models.ForeignKey(BaseLevel, verbose_name=u"小/初/高")
+    name = models.CharField(u"年级", max_length=12)
+
+    def __unicode__(self):
+        return self.name
