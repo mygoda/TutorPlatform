@@ -35,4 +35,6 @@ router.register("teacher/", teacher_views.TeacherViewset, base_name="teacher_api
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
+    url(r'^docs/', schema_view),
+
 ]
