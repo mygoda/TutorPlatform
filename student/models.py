@@ -9,11 +9,13 @@ from django.db import models
 from common import models as common_models
 from student import const
 from common.const import Sex
+from libs import uuid
 
 
 class Student(common_models.CommonModel):
     """学生"""
 
+    uid = models.CharField(u"学生ID", max_length=16, default=uuid.create_student_uid, unique=True)
     city = models.ForeignKey(common_models.City, verbose_name="城市")
     name = models.CharField(u"姓名", max_length=32)
     phone = models.CharField(u"电话", max_length=16)
