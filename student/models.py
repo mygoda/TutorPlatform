@@ -9,12 +9,14 @@ from django.db import models
 from common import models as common_models
 from student import const
 from common.const import Sex
+from customer.models import Customer
 from libs import uuid
 
 
 class Student(common_models.CommonModel):
     """学生"""
 
+    customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
     uid = models.CharField(u"学生ID", max_length=16, default=uuid.create_student_uid, unique=True)
     city = models.ForeignKey(common_models.City, verbose_name="城市")
     name = models.CharField(u"姓名", max_length=32)
@@ -24,10 +26,11 @@ class Student(common_models.CommonModel):
     study = models.CharField(u"学习情况", max_length=32, null=True, blank=True)
     times = models.IntegerField(u"补习次数", default=1, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
+    sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
 
     # 对老师的要求
     require = models.CharField(u"教师资质", max_length=32, default="不限")
-    sex = models.IntegerField(u"性别要求", default=Sex.WOMEN, help_text="0：女 1：男")
+    teacher_sex = models.IntegerField(u"教师性别", default=Sex.WOMEN, help_text="0：女 1：男")
 
     # 地址
     address = models.CharField(u"上课地点", max_length=128)

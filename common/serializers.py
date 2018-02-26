@@ -32,3 +32,12 @@ class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Level
         fields = "__all__"
+
+
+class SchoolSerializer(serializers.ModelSerializer):
+
+    city = CitySerializer()
+
+    class Meta:
+        model = models.School
+        fields = "__all__"

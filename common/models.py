@@ -75,3 +75,13 @@ class Level(CommonModel):
 
     def __unicode__(self):
         return self.name
+
+
+class School(CommonModel):
+    """学校"""
+
+    city = models.ForeignKey(City, verbose_name="城市")
+    name = models.CharField(u"学校名称", max_length=64)
+
+    def __unicode__(self):
+        return self.name

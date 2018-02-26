@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
     # my app
     "common",
+    "customer",
     "teacher",
     "student"
 ]
