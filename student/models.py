@@ -30,7 +30,7 @@ class Student(common_models.CommonModel):
     # 地址
     address = models.CharField(u"上课地点", max_length=128)
     id_valid = models.BooleanField(u"是否有效", default=True)
-    
+
     extra = models.CharField(u"其他", max_length=128, null=True, blank=True)
 
     def __unicode__(self):
