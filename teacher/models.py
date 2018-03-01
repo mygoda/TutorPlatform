@@ -23,6 +23,7 @@ class Teacher(common_models.CommonModel):
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
     learn = models.IntegerField("学历", default=0, choices=TEACHER_LEARN)
     profession = models.CharField(u"专业", max_length=32, null=True, blank=True)
+    high_score = models.IntegerField(u"高考分数", default=0)
     money = models.IntegerField(u"期望薪资", default=0, help_text="默认单位：小时")
     is_valid = models.BooleanField(u"是否有效", default=True)
     head_image = models.CharField(u"头像", max_length=255, null=True, blank=True)
@@ -33,6 +34,17 @@ class Teacher(common_models.CommonModel):
     @property
     def subjects(self):
         return self.teachersubjectsship_set.all()
+
+    @classmethod
+    def add_teacher(cls, **kwargs):
+        """
+            添加老师
+        :return:
+        """
+        teacher = cls(**kwargs)
+        teacher.save(force_insert=True)
+        return teacher
+
 
 
 class TeacherSubjectsShip(common_models.Subject):
