@@ -30,6 +30,8 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:
         """
         if self.action == 'create':
+            return teacher_serializers.CreateTeacherSerializer
+        elif self.action == 'retrieve':
             return teacher_serializers.TeacherSerializer
         else:
             return teacher_serializers.TeacherSerializer
@@ -39,17 +41,25 @@ class TeacherViewset(viewsets.ModelViewSet):
             创建教师
         :param request:
         :param args:
-        :param kwargs:
-        :param customer: {
+        :param kwargs:{
+            customer: 用户id
+            last_name: 教师姓氏
+            city: 城市id
+            school: 学校id
+            phone: 电话
+            sex: 性别    /0：女 1：男
+            learn: 学历
+            profession: 专业
+            high_score: 高考分数
+            money: 期望薪资 /默认单位：小时
+            head_image: 头像
+            subjects: [
+                {},
+                {}
+            ],
+            self_introduction: 自我介绍
+        }
 
-                }
-        :param phone:
-        :param phone:
-        :param phone:
-        :param phone:
-        :param phone:
-        :param phone:
-        :param phone:
 
         :return:
         """
@@ -58,9 +68,8 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
-        teacher_id = params.get('uid')
-        logger.info('start create teacher %s info %s' % (teacher_id, params))
-
-        return Response({'status': 'success'})
-
+        print('start create teacher info %s' % params)
+        # 新增教师
+        teacher_id = teacher_models.Teacher.add_teacher(**params)
+        return Response({'status': 'success', 'teacher_id': teacher_id})
 

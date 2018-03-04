@@ -27,6 +27,7 @@ class Teacher(common_models.CommonModel):
     money = models.IntegerField(u"期望薪资", default=0, help_text="默认单位：小时")
     is_valid = models.BooleanField(u"是否有效", default=True)
     head_image = models.CharField(u"头像", max_length=255, null=True, blank=True)
+    self_introduction = models.CharField(u"自我介绍", max_length=1000, null=True, blank=True)
 
     def __unicode__(self):
         return "%s老师" % self.last_name
@@ -41,9 +42,12 @@ class Teacher(common_models.CommonModel):
             添加老师
         :return:
         """
+        subjects = kwargs.pop('subjects')
         teacher = cls(**kwargs)
+        teacher.teachersubjectsship_set(*subjects)
         teacher.save(force_insert=True)
-        return teacher
+
+        return teacher.uid
 
 
 

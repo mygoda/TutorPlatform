@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
 
     # sentry
-    'raven.contrib.django.raven_compat',
+    # 'raven.contrib.django.raven_compat',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -94,10 +94,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '114.112.75.135',
-        'NAME': 'tutor',
-        'USER': 'root',
-        'PASSWORD': 'P@$$w0rd'
+        'HOST': os.environ.get('DB_HOST', '114.112.75.135'),
+        'NAME': os.environ.get('DB_NAME', 'tutor'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'P@$$w0rd'),
     }
 }
 

@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+
+  api:
+     env_file:
+       - test.env
+     image:
+     restart: always
+     command: bash -c "sh run_api.sh"
+     volumes:
+       -  /data/TutorPlatform:/code
+     working_dir: /code
+     ports:
+       - "7000:80"
+     labels:
+       name: task_api
