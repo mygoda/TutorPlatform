@@ -44,14 +44,26 @@ class Teacher(common_models.CommonModel):
         """
         subjects = kwargs.pop('subjects')
         teacher = cls(**kwargs)
-        teacher.teachersubjectsship_set(*subjects)
         teacher.save(force_insert=True)
+        for subject in subjects:
+            subject["teacher"] = teacher
+            teacher_subject = TeacherSubjectsShip(**subject)
+            teacher_subject.save()
 
-        return teacher.uid
+        return teacher.id
 
+    def delete_teacher(self):
+        """
+            删除教师
+            将is_valid 置为Fasle
+        :return:
+        """
+        if self.is_valid:
+            self.is_valid = False
+            self.save()
+        return
 
-
-class TeacherSubjectsShip(common_models.Subject):
+class TeacherSubjectsShip(common_models.CommonModel):
 
     teacher = models.ForeignKey(Teacher, verbose_name=u"教师")
     subject = models.ForeignKey(common_models.Subject, verbose_name="学科", related_name="teacher_subject")

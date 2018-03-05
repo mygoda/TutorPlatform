@@ -9,7 +9,7 @@ from common import serializers as common_serializer
 class TeacherSubjectSerializer(serializers.ModelSerializer):
     """教师学科"""
 
-    # subject = common_serializer.SubjectSerializer()
+    subject = common_serializer.SubjectSerializer()
 
     class Meta:
         model = models.TeacherSubjectsShip
@@ -27,12 +27,20 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CreateTeacherSubjectSerializer(serializers.ModelSerializer):
+    """教师学科"""
+
+    class Meta:
+        model = models.TeacherSubjectsShip
+        fields = ("id", "subject")
+
+
 class CreateTeacherSerializer(serializers.ModelSerializer):
     """
         创建老师
     """
 
-    subjects = TeacherSubjectSerializer(many=True)
+    subjects = CreateTeacherSubjectSerializer(many=True)
 
     class Meta:
         model = models.Teacher

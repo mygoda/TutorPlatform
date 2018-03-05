@@ -33,6 +33,10 @@ class TeacherViewset(viewsets.ModelViewSet):
             return teacher_serializers.CreateTeacherSerializer
         elif self.action == 'retrieve':
             return teacher_serializers.TeacherSerializer
+        elif self.action == "list":
+            return teacher_serializers.TeacherSerializer
+        elif self.action == "update":
+            return teacher_serializers.CreateTeacherSerializer
         else:
             return teacher_serializers.TeacherSerializer
 
@@ -61,7 +65,10 @@ class TeacherViewset(viewsets.ModelViewSet):
         }
 
 
-        :return:
+        :return:{
+                status: 返回状态  True/Fasle
+                teacher_id: 教师id
+            }
         """
         # 序列化参数
         data = request.data
@@ -69,7 +76,32 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         print('start create teacher info %s' % params)
+        teacher_phone = params.get("phone")
+        if teacher_models.Teacher.objects.filter(phone=teacher_phone, is_valid=True).exists():
+            return Response({'status': False, 'msg': '%s 已存在' % teacher_phone})
         # 新增教师
         teacher_id = teacher_models.Teacher.add_teacher(**params)
-        return Response({'status': 'success', 'teacher_id': teacher_id})
+        return Response({'status': True, 'teacher_id': teacher_id})
+
+    def update(self, request, pk=None):
+        """
+            修改教师
+        :param request:
+        :param pk:
+        :return:
+        """
+        pass
+
+    def destroy(self, request, pk=None):
+        """
+            删除老师
+        :param request:
+        :param pk: 教师id
+        :return:
+        """
+        print('start delete teacher %s' % pk)
+        teacher = teacher_models.Teacher.objects.get(id=pk)
+        teacher.delete_teacher()
+        return Response({'status': True, 'teacher_id': pk})
+
 
