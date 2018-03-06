@@ -27,3 +27,21 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CreateTeacherSubjectSerializer(serializers.ModelSerializer):
+    """教师学科"""
+
+    class Meta:
+        model = models.TeacherSubjectsShip
+        fields = ("id", "subject")
+
+
+class CreateTeacherSerializer(serializers.ModelSerializer):
+    """
+        创建老师
+    """
+
+    subjects = CreateTeacherSubjectSerializer(many=True)
+
+    class Meta:
+        model = models.Teacher
+        fields = "__all__"

@@ -28,8 +28,8 @@ URL_ID = "(?P<id>[0-9]+)"
 
 schema_view = get_swagger_view(title='家教平台接口')
 router = routers.DefaultRouter()
-router.register("students/", student_views.StudentViewset, base_name="student_api")
-router.register("teacher/", teacher_views.TeacherViewset, base_name="teacher_api")
+router.register(r"students", student_views.StudentViewset, base_name="student_api")
+router.register(r"teacher", teacher_views.TeacherViewset, base_name="teacher_api")
 
 
 urlpatterns = [
