@@ -8,7 +8,7 @@ server {
             include /etc/nginx/proxy_params;
         }
         location /static/ {
-          #alias /usr/local/lib/python3.6/site-packages/django/contrib/admin/static/;
+          #alias /usr/local/lib/python3.5/site-packages/django/contrib/admin/static/;
           alias /code/static/;
           autoindex on;
         }
