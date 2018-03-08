@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # third app
     'rest_framework',
     'rest_framework_swagger',
+    'gunicorn',
 
     # my app
     "common",
