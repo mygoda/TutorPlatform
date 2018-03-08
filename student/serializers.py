@@ -17,3 +17,11 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CreateStudentSerializer(serializers.ModelSerializer):
+    """
+        创建学生
+    """
+
+    class Meta:
+        model = models.Student
+        fields = "__all__"

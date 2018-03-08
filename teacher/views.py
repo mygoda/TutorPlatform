@@ -58,7 +58,7 @@ class TeacherViewset(viewsets.ModelViewSet):
             money: 期望薪资 /默认单位：小时
             head_image: 头像
             subjects: [
-                {},
+                {"subject": 1},
                 {}
             ],
             self_introduction: 自我介绍

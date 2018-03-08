@@ -19,3 +19,41 @@ class Customer(common_models.CommonModel):
 
     def __unicode__(self):
         return self.uuid
+
+
+class UserFavorite(common_models.CommonModel):
+    """
+        用户收藏
+    """
+
+    FAV_TYPE = (
+        (1, '教师'),
+        (2, '学生')
+    )
+
+    user = models.ForeignKey(Customer, help_text='用户')
+    fav_id = models.IntegerField(default=0, help_text='被收藏者id')
+    fav_type = models.IntegerField(choices=FAV_TYPE, default=1, help_text='1: 教师 2: 学生')
+
+    class Meta:
+        verbose_name = u'用户收藏'
+        verbose_name_plural = verbose_name
+
+
+class UserRequest(common_models.CommonModel):
+    """
+        用户申请
+    """
+
+    REQ_TYPE = (
+        (1, '教师'),
+        (2, '学生')
+    )
+
+    user = models.ForeignKey(Customer, help_text='用户')
+    req_id = models.IntegerField(default=0, help_text='被申请者id')
+    req_type = models.IntegerField(choices=REQ_TYPE, default=1, help_text='1: 教师 2: 学生')
+
+    class Meta:
+        verbose_name = u'用户申请'
+        verbose_name_plural = verbose_name

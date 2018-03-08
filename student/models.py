@@ -34,14 +34,32 @@ class Student(common_models.CommonModel):
 
     # 地址
     address = models.CharField(u"上课地点", max_length=128)
-    id_valid = models.BooleanField(u"是否有效", default=True)
+    is_valid = models.BooleanField(u"是否有效", default=True)
 
     extra = models.CharField(u"其他", max_length=128, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def add_student(cls, **kwargs):
+        """
+            添加
+        :return:
+        """
+        student = cls(**kwargs)
+        student.save(force_insert=True)
+        return student.id
 
-
+    def delete_student(self):
+        """
+            删除
+            将is_valid 置为Fasle
+        :return:
+        """
+        if self.is_valid:
+            self.is_valid = False
+            self.save()
+        return
 
 

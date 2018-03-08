@@ -5,7 +5,7 @@ services:
   api:
      env_file:
        - test.env
-     image:
+     image: wenxingu/tutor:base
      restart: always
      command: bash -c "sh run_api.sh"
      volumes:

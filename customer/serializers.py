@@ -6,6 +6,11 @@ from . import models
 from common import serializers as common_serializer
 
 
+class FavoriteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.UserFavorite
+        fields = "__all__"
 
 
 
