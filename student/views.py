@@ -34,29 +34,29 @@ class StudentViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-            添加学生
-        :param request:
-        :param args:
-        :param kwargs:{
-                "customer": "1",
-                "name": "小学生",
-                "city": "1",
-                "level": "1",
-                "phone": "15201170495",
-                "times": 1,
-                "learn": "1",
-                "study": "学习主动性差",
-                "sex": 0,
-                "money": 100,
-                "require": "211高校",
-                "teacher_sex": 1,
-                "subject": 6,
-                "address": "上课地点都行",
-                "extra": "其他"
-            }
-
-        :return:
-        """
+            添加学生    
+        :param request:    
+        :param args:    
+        :param kwargs:{    
+                "customer": "1",    
+                "name": "小学生",    
+                "city": "1",    
+                "level": "1",    
+                "phone": "15201170495",    
+                "times": 1,     
+                "learn": "1",     
+                "study": "学习主动性差",    
+                "sex": 0,    
+                "money": 100,    
+                "require": "211高校",    
+                "teacher_sex": 1,    
+                "subject": 6,    
+                "address": "上课地点都行",    
+                "extra": "其他"    
+            }    
+    
+        :return:    
+        """    
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)

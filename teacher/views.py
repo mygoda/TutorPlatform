@@ -42,35 +42,34 @@ class TeacherViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-            创建教师
-        :param request:
-        :param args:
-        :param kwargs:{
-            customer: 用户id
-            last_name: 教师姓氏
-            city: 城市id
-            school: 学校id
-            phone: 电话
-            sex: 性别    /0：女 1：男
-            learn: 学历
-            profession: 专业
-            high_score: 高考分数
-            money: 期望薪资 /默认单位：小时
-            head_image: 头像
-            subjects: [
-                {"subject": 1},
-                {}
-            ],
-            self_introduction: 自我介绍
-        }
-
-
-        :return:{
-                status: 返回状态  True/Fasle
-                teacher_id: 教师id
-            }
-        """
-        # 序列化参数
+            创建教师    
+        :param request:    
+        :param args:    
+        :param kwargs:{    
+            customer: 用户id    
+            last_name: 教师姓氏    
+            city: 城市id    
+            school: 学校id    
+            phone: 电话    
+            sex: 性别    /0：女 1：男    
+            learn: 学历    
+            profession: 专业    
+            high_score: 高考分数    
+            money: 期望薪资 /默认单位：小时    
+            head_image: 头像    
+            subjects: [    
+                {"subject": 1},    
+                {}    
+            ],    
+            self_introduction: 自我介绍    
+        }    
+                  
+        :return:{    
+                status: 返回状态  True/Fasle    
+                teacher_id: 教师id    
+            }    
+        """    
+        # 序列化参数    
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
