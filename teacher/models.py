@@ -36,6 +36,10 @@ class Teacher(common_models.CommonModel):
     def subjects(self):
         return self.teachersubjectsship_set.all()
 
+    @property
+    def teacher_types(self):
+        return self.teachertypesship_set.all()
+
     @classmethod
     def add_teacher(cls, **kwargs):
         """

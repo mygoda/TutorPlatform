@@ -41,6 +41,14 @@ class Student(common_models.CommonModel):
     def __unicode__(self):
         return self.name
 
+    @property
+    def student_types(self):
+        return self.studenttypesship_set.all()
+
+    @property
+    def teacher_types(self):
+        return self.studentteachertypes_set.all()
+
     @classmethod
     def add_student(cls, **kwargs):
         """

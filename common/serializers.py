@@ -41,3 +41,17 @@ class SchoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.School
         fields = "__all__"
+
+
+class TeacherTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.TeacherType
+        fields = "__all__"
+
+
+class StudentTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.StudentType
+        fields = "__all__"
