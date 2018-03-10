@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '6w%xrgr26r&e^^ovq(vu=67o8=-%fm2g1_!z(30jxkluhubq)p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -140,3 +140,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+# rest api setting
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'common.utils.CustomPagination',
+    'PAGE_SIZE': 20,
+}

@@ -45,17 +45,24 @@ class City(CommonModel):
     code = models.CharField(u"城市编码", max_length=32)
     name = models.CharField(u"城市名称", max_length=32)
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
 
+    class Meta:
+        verbose_name = u'城市'
+        verbose_name_plural = verbose_name
 
 class Subject(CommonModel):
     """科目"""
 
     name = models.CharField(u"科目", max_length=16)
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'科目'
+        verbose_name_plural = verbose_name
 
 
 class BaseLevel(CommonModel):
@@ -63,8 +70,12 @@ class BaseLevel(CommonModel):
 
     name = models.CharField(u"名称", max_length=16)
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'学校等级'
+        verbose_name_plural = verbose_name
 
 
 class Level(CommonModel):
@@ -73,8 +84,12 @@ class Level(CommonModel):
     base = models.ForeignKey(BaseLevel, verbose_name=u"小/初/高")
     name = models.CharField(u"年级", max_length=12)
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'年级'
+        verbose_name_plural = verbose_name
 
 
 class School(CommonModel):
@@ -83,5 +98,33 @@ class School(CommonModel):
     city = models.ForeignKey(City, verbose_name="城市")
     name = models.CharField(u"学校名称", max_length=64)
 
-    def __unicode__(self):
-        return self.name
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'学校'
+        verbose_name_plural = verbose_name
+
+
+class TeacherType(CommonModel):
+    """
+        教学 特点 标签
+    """
+
+    name = models.CharField(u"特点", max_length=200)
+
+    class Meta:
+        verbose_name = u'教师特点'
+        verbose_name_plural = verbose_name
+
+
+class StudentType(CommonModel):
+    """
+        学生特点 存在的问题 标签
+    """
+
+    name = models.CharField(u"存在问题", max_length=200)
+
+    class Meta:
+        verbose_name = u'学生存在问题'
+        verbose_name_plural = verbose_name

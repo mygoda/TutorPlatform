@@ -17,8 +17,9 @@ class Customer(common_models.CommonModel):
     nickname = models.CharField(u"微信名称", max_length=64, null=True, blank=True)
     avatar_url = models.URLField("头像", help_text="头像", null=True, blank=True)
 
-    def __unicode__(self):
-        return self.uuid
+    class Meta:
+        verbose_name = u'用户'
+        verbose_name_plural = verbose_name
 
 
 class UserFavorite(common_models.CommonModel):

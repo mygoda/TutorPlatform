@@ -61,8 +61,12 @@ class TeacherViewset(viewsets.ModelViewSet):
                 {"subject": 1},    
                 {}    
             ],    
-            self_introduction: 自我介绍    
-        }    
+            teacher_types: [
+                {'teacher_type': 1},
+                {}
+            ],
+            self_introduction: 自我介绍
+        }
                   
         :return:{    
                 status: 返回状态  True/Fasle    
@@ -103,4 +107,22 @@ class TeacherViewset(viewsets.ModelViewSet):
         teacher.delete_teacher()
         return Response({'status': True, 'teacher_id': pk})
 
-
+    def list(self, request, *args, **kwargs):
+        """
+            获取教师list
+            支持分页
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # 获取 教师 queryset
+        queryset = self.get_queryset()
+        # 获取分页信息
+        page = self.paginate_queryset(queryset=queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        # 没有分页时
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

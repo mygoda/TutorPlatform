@@ -43,12 +43,21 @@ class Teacher(common_models.CommonModel):
         :return:
         """
         subjects = kwargs.pop('subjects')
+        teacher_types = kwargs.pop('teacher_types')
+
         teacher = cls(**kwargs)
         teacher.save(force_insert=True)
+        # 添加教师 所教 科目
         for subject in subjects:
             subject["teacher"] = teacher
             teacher_subject = TeacherSubjectsShip(**subject)
             teacher_subject.save()
+
+        # 添加教师 教学特点
+        for teacher_type in teacher_types:
+            teacher_type["teacher"] = teacher
+            teacher_type_ship = TeacherTypesShip(**teacher_type)
+            teacher_type_ship.save()
 
         return teacher.id
 
@@ -70,4 +79,13 @@ class TeacherSubjectsShip(common_models.CommonModel):
 
     def __unicode__(self):
         return "%s:%s" % (self.teacher.uid, self.subject.name)
+
+
+class TeacherTypesShip(common_models.CommonModel):
+
+    teacher = models.ForeignKey(Teacher, verbose_name=u"教师")
+    teacher_type = models.ForeignKey(common_models.TeacherType, verbose_name="教学特点")
+
+    def __unicode__(self):
+        return "%s:%s" % (self.teacher.uid, self.teacher_type.name)
 

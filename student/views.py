@@ -52,7 +52,15 @@ class StudentViewset(viewsets.ModelViewSet):
                 "teacher_sex": 1,    
                 "subject": 6,    
                 "address": "上课地点都行",    
-                "extra": "其他"    
+                "teacher_types": [
+                    {'teacher_type': 1},
+                    {}
+                ],
+                "student_types": [
+                    {'student_type': 1},
+                    {}
+                ],
+                "extra": "其他"
             }    
     
         :return:    
@@ -80,3 +88,21 @@ class StudentViewset(viewsets.ModelViewSet):
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
         return Response({'status': True, 'student_id': pk})
+
+    def list(self, request, *args, **kwargs):
+        """
+            获取学生list
+            支持分页
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset=queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
