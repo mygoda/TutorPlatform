@@ -35,6 +35,7 @@ class StudentSerializer(serializers.ModelSerializer):
     level = common_serializer.LevelSerializer()
     student_types = StudentTypeSerializer(many=True)
     teacher_types = StudentTeacherTypeSerializer(many=True)
+    follower_count = serializers.IntegerField()
 
     class Meta:
         model = models.Student
@@ -68,3 +69,15 @@ class CreateStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = "__all__"
+
+
+# 学生被收藏序列化
+
+class CreateStudentFollowerSerializer(serializers.ModelSerializer):
+    """
+        收藏学生
+    """
+
+    class Meta:
+        model = models.StudentFollowers
+        fields = '__all__'

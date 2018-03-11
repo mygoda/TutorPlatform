@@ -9,7 +9,10 @@ from . import models as student_models
 
 
 class StudentViewset(viewsets.ModelViewSet):
-    """学员接口"""
+    """
+        学员接口
+        follower_count 是 此学生 被收藏数
+    """
 
     serializer_class = student_serializers.StudentSerializer
 
@@ -72,9 +75,11 @@ class StudentViewset(viewsets.ModelViewSet):
         print('start create student info %s' % params)
         student_phone = params.get("phone")
         if student_models.Student.objects.filter(phone=student_phone, is_valid=True).exists():
+            print('phone %s is already exists' % student_phone)
             return Response({'status': False, 'msg': '%s 已存在' % student_phone})
         # 新增student
         student_id = student_models.Student.add_student(**params)
+        print('add student %s success' % student_id)
         return Response({'status': True, 'student_id': student_id})
 
     def destroy(self, request, pk=None):
@@ -84,9 +89,10 @@ class StudentViewset(viewsets.ModelViewSet):
         :param pk: 学生id
         :return:
         """
-        print('start delete teacher %s' % pk)
+        print('start delete student %s' % pk)
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
+        print('delete student %s success' % pk)
         return Response({'status': True, 'student_id': pk})
 
     def list(self, request, *args, **kwargs):
@@ -106,3 +112,48 @@ class StudentViewset(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class StudentFollowerViewset(viewsets.ModelViewSet):
+    """
+        学生收藏api
+    """
+
+    def get_queryset(self):
+        return student_models.StudentFollowers.objects.filter(is_valid=True)
+
+    def get_serializer_class(self):
+        """
+            获取序列化
+        :return:
+        """
+        if self.action == 'create':
+            return student_serializers.CreateStudentFollowerSerializer
+        else:
+            return student_serializers.CreateStudentFollowerSerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+            点击收藏学生
+        :param request:
+        :param args:
+        :param kwargs:{
+              "student": "1",
+              "follower_id": "1"
+            }
+        :return:
+        """
+
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        print('start add student followers info %s' % params)
+        student_follower_id = student_models.StudentFollowers.add_student_follower(**params)
+        if student_follower_id:
+            return Response({'status': True, 'student_follower_id': student_follower_id})
+        print("add student follower error, is already exists. params: %s" % params)
+        return Response({'status': False, 'msg': '收藏失败'})
+
+
+

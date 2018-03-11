@@ -81,9 +81,11 @@ class TeacherViewset(viewsets.ModelViewSet):
         print('start create teacher info %s' % params)
         teacher_phone = params.get("phone")
         if teacher_models.Teacher.objects.filter(phone=teacher_phone, is_valid=True).exists():
+            print('phone %s is already exists' % teacher_phone)
             return Response({'status': False, 'msg': '%s 已存在' % teacher_phone})
         # 新增教师
         teacher_id = teacher_models.Teacher.add_teacher(**params)
+        print('add teacher %s success' % teacher_id)
         return Response({'status': True, 'teacher_id': teacher_id})
 
     def update(self, request, pk=None):
@@ -105,6 +107,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         print('start delete teacher %s' % pk)
         teacher = teacher_models.Teacher.objects.get(id=pk)
         teacher.delete_teacher()
+        print('delete teacher %s success' % pk)
         return Response({'status': True, 'teacher_id': pk})
 
     def list(self, request, *args, **kwargs):
@@ -126,3 +129,45 @@ class TeacherViewset(viewsets.ModelViewSet):
         # 没有分页时
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class TeacherFollowerViewset(viewsets.ModelViewSet):
+    """
+        学生收藏api
+    """
+
+    def get_queryset(self):
+        return teacher_models.TeacherFollowers.objects.filter(is_valid=True)
+
+    def get_serializer_class(self):
+        """
+            获取序列化
+        :return:
+        """
+        if self.action == 'create':
+            return teacher_serializers.CreateTeacherFollowerSerializer
+        else:
+            return teacher_serializers.CreateTeacherFollowerSerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+            点击收藏  教师
+        :param request:
+        :param args:
+        :param kwargs:{
+              "teacher": "1",
+              "follower_id": "1"
+            }
+        :return:
+        """
+
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        print('start add teacher followers info %s' % params)
+        teacher_follower_id = teacher_models.TeacherFollowers.add_teacher_follower(**params)
+        if teacher_follower_id:
+            return Response({'status': True, 'teacher_follower_id': teacher_follower_id})
+        print("add teacher follower error, is already exists. params: %s" % params)
+        return Response({'status': False, 'msg': '收藏失败'})

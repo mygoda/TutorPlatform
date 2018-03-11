@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db import models
 from common import models as common_models
 from libs import uuid
-from common.const import Sex
+from common.const import Sex, FOLLOWER_TYPE
 from .const import TEACHER_LEARN
 from customer.models import Customer
 # Create your models here.
@@ -39,6 +39,13 @@ class Teacher(common_models.CommonModel):
     @property
     def teacher_types(self):
         return self.teachertypesship_set.all()
+
+    @property
+    def follower_count(self):
+        return self.teacherfollowers_set.filter(is_valid=True).count()
+
+    def followers(self):
+        return self.teacherfollowers_set.filter(is_valid=True).all()
 
     @classmethod
     def add_teacher(cls, **kwargs):
@@ -93,3 +100,29 @@ class TeacherTypesShip(common_models.CommonModel):
     def __unicode__(self):
         return "%s:%s" % (self.teacher.uid, self.teacher_type.name)
 
+
+class TeacherFollowers(common_models.CommonModel):
+    """
+        老师 被收藏关系表
+        目前仅支持学生收藏老师，老师之间不可以收藏
+    """
+
+    teacher = models.ForeignKey(Teacher, help_text=u"教师")
+    follower_id = models.CharField(u"收藏者id", max_length=64, help_text=u"收藏者id")
+    follower_type = models.IntegerField(u"收藏者类型, 目前教师仅能被学生收藏", default=FOLLOWER_TYPE.STUDENT, help_text="1：老师 2：学生")
+    is_valid = models.BooleanField(u"是否有效", default=True)
+
+    class Meta:
+        verbose_name = u'被收藏老师'
+        verbose_name_plural = verbose_name
+
+    @classmethod
+    def add_teacher_follower(cls, **kwargs):
+        """
+            点击收藏 教师
+        :return:
+        """
+        if not cls.objects.filter(is_valid=True, teacher=kwargs.get("teacher"), follower_id=kwargs.get("follower_id")).exists():
+            student_follower = cls(**kwargs)
+            student_follower.save(force_insert=True)
+            return student_follower.id

@@ -8,7 +8,7 @@ from django.db import models
 
 from common import models as common_models
 from student import const
-from common.const import Sex
+from common.const import Sex, FOLLOWER_TYPE
 from customer.models import Customer
 from libs import uuid
 
@@ -48,6 +48,10 @@ class Student(common_models.CommonModel):
     @property
     def teacher_types(self):
         return self.studentteachertypes_set.all()
+
+    @property
+    def follower_count(self):
+        return self.studentfollowers_set.filter(is_valid=True).count()
 
     @classmethod
     def add_student(cls, **kwargs):
@@ -106,3 +110,30 @@ class StudentTypesShip(common_models.CommonModel):
 
     def __unicode__(self):
         return "%s:%s" % (self.student.uid, self.student_type.name)
+
+
+class StudentFollowers(common_models.CommonModel):
+    """
+        学生 被收藏关系表
+        目前仅支持老师收藏学生，学生之间不可以收藏
+    """
+
+    student = models.ForeignKey(Student, help_text=u"学生")
+    follower_id = models.CharField(u"收藏者id", max_length=64, help_text=u"收藏者id")
+    follower_type = models.IntegerField(u"收藏者类型，目前学生仅能被教师收藏", default=FOLLOWER_TYPE.TEACHER, help_text="1：老师 2：学生")
+    is_valid = models.BooleanField(u"是否有效", default=True)
+
+    class Meta:
+        verbose_name = u'被收藏学生'
+        verbose_name_plural = verbose_name
+
+    @classmethod
+    def add_student_follower(self, **kwargs):
+        """
+            点击收藏学生
+        :return:
+        """
+        if not StudentFollowers.objects.filter(is_valid=True, student=kwargs.get("student"), follower_id=kwargs.get("follower_id")).exists():
+            student_follower = StudentFollowers(**kwargs)
+            student_follower.save(force_insert=True)
+            return student_follower.id

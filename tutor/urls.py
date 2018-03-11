@@ -36,10 +36,10 @@ router.register(r"subject", common_views.SubjectViewset, base_name="subject_api"
 router.register(r"baselevel", common_views.BaseLevelViewset, base_name="baselevel_api")
 router.register(r"level", common_views.LevelViewset, base_name="level_api")
 router.register(r"school", common_views.SchoolViewset, base_name="school_api")
-# customer api
-router.register(r"favorite", customer_views.FavoriteViewset, base_name="favorite_api")
 # student api
 router.register(r"students", student_views.StudentViewset, base_name="student_api")
+router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")
+router.register(r"follower/teacher", teacher_views.TeacherFollowerViewset, base_name="follower_teacher_api")
 # teacher api
 router.register(r"teacher", teacher_views.TeacherViewset, base_name="teacher_api")
 

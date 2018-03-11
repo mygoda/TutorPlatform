@@ -34,6 +34,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     school = common_serializer.SchoolSerializer()
     subjects = TeacherSubjectSerializer(many=True)
     teacher_types = TeacherTypeSerializer(many=True)
+    follower_count = serializers.IntegerField()
 
     class Meta:
         model = models.Teacher
@@ -69,3 +70,15 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Teacher
         fields = "__all__"
+
+
+# 教师被收藏序列化
+
+class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
+    """
+        收藏 教师
+    """
+
+    class Meta:
+        model = models.TeacherFollowers
+        fields = '__all__'
