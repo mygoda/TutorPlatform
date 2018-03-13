@@ -36,7 +36,7 @@ class CityViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.City.objects.filter()
+        return common_models.City.objects.all()
 
     def get_serializer_class(self):
         """
@@ -52,7 +52,7 @@ class SubjectViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.Subject.objects.filter()
+        return common_models.Subject.objects.all()
 
     def get_serializer_class(self):
         """
@@ -68,7 +68,7 @@ class BaseLevelViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.BaseLevel.objects.filter()
+        return common_models.BaseLevel.objects.all()
 
     def get_serializer_class(self):
         """
@@ -84,7 +84,7 @@ class LevelViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.Level.objects.filter()
+        return common_models.Level.objects.all()
 
     def get_serializer_class(self):
         """
@@ -100,7 +100,7 @@ class SchoolViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.School.objects.filter()
+        return common_models.School.objects.all()
 
     def get_serializer_class(self):
         """
@@ -116,7 +116,7 @@ class TeacherTypeViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.TeacherType.objects.filter()
+        return common_models.TeacherType.objects.all()
 
     def get_serializer_class(self):
         """
@@ -132,7 +132,7 @@ class StudentTypeViewset(viewsets.ModelViewSet):
     """
 
     def get_queryset(self):
-        return common_models.StudentType.objects.filter()
+        return common_models.StudentType.objects.all()
 
     def get_serializer_class(self):
         """
@@ -140,4 +140,37 @@ class StudentTypeViewset(viewsets.ModelViewSet):
         :return:
         """
         return common_serializers.StudentTypeSerializer
+
+
+class BasisViewset(viewsets.ModelViewSet):
+    """
+        学生基础 api view
+    """
+
+    def get_queryset(self):
+        return common_models.Basis.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取 学生基础 序列化
+        :return:
+        """
+        return common_serializers.BasisSerializer
+
+
+class LearnViewset(viewsets.ModelViewSet):
+    """
+        学历 api view
+    """
+
+    def get_queryset(self):
+        return common_models.Learn.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取 学历 序列化
+        :return:
+        """
+        return common_serializers.LearnSerializer
+
 

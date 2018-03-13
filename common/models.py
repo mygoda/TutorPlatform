@@ -92,11 +92,38 @@ class Level(CommonModel):
         verbose_name_plural = verbose_name
 
 
+class Basis(CommonModel):
+    """学生基础"""
+
+    name = models.CharField(u"学生基础", max_length=12)
+
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'学生基础'
+        verbose_name_plural = verbose_name
+
+
+class Learn(CommonModel):
+    """学历"""
+
+    name = models.CharField(u"学历", max_length=12)
+
+    # def __unicode__(self):
+    #     return self.name
+
+    class Meta:
+        verbose_name = u'学历'
+        verbose_name_plural = verbose_name
+
+
 class School(CommonModel):
     """学校"""
 
     city = models.ForeignKey(City, verbose_name="城市")
     name = models.CharField(u"学校名称", max_length=64)
+    level = models.CharField(u"学校等级", default=985, max_length=24)
 
     # def __unicode__(self):
     #     return self.name

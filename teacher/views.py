@@ -79,14 +79,12 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         print('start create teacher info %s' % params)
-        teacher_phone = params.get("phone")
-        if teacher_models.Teacher.objects.filter(phone=teacher_phone, is_valid=True).exists():
-            print('phone %s is already exists' % teacher_phone)
-            return Response({'status': 0, 'msg': '%s 已存在' % teacher_phone})
-        # 新增教师
-        teacher_id = teacher_models.Teacher.add_teacher(**params)
-        print('add teacher %s success' % teacher_id)
-        return Response({'status': 1, 'teacher_id': teacher_id})
+        status, msg = teacher_models.Teacher.add_teacher(**params)
+        if status:
+            print('add teacher %s success' % msg)
+            return Response({'status': 1, 'teacher_id': msg})
+        print('add teacher %s error msg %s' % (params, msg))
+        return Response({'status': 0, 'msg': msg})
 
     def update(self, request, pk=None):
         """

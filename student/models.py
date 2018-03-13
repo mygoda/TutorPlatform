@@ -24,6 +24,7 @@ class Student(common_models.CommonModel):
     level = models.ForeignKey(common_models.Level, verbose_name="年级")
     subject = models.ForeignKey(common_models.Subject, verbose_name="学科")
     study = models.CharField(u"学习情况", max_length=32, null=True, blank=True)
+    basis = models.ForeignKey(common_models.Basis, default=1, verbose_name="学生基础")
     times = models.IntegerField(u"补习次数", default=1, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
@@ -59,6 +60,9 @@ class Student(common_models.CommonModel):
             添加
         :return:
         """
+        customer = kwargs.get("customer")
+        if customer.customer_type:
+            return False, '用户已注册过角色'
 
         if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
             teacher_types = kwargs.pop('teacher_types')
@@ -78,8 +82,11 @@ class Student(common_models.CommonModel):
                 student_type["student"] = student
                 student_type_ship = StudentTypesShip(**student_type)
                 student_type_ship.save()
-
-            return student.id
+            # 变更用户角色
+            if student.customer.change_type(2):
+                return True, student.id
+            return False, '用户变更学生失败'
+        return False, '%s 已存在' % kwargs.get("phone")
 
     def delete_student(self):
         """
@@ -90,7 +97,9 @@ class Student(common_models.CommonModel):
         if self.is_valid:
             self.is_valid = False
             self.save()
-        return
+
+            self.customer.change_type()
+        return True
 
 
 class StudentTeacherTypes(common_models.CommonModel):
@@ -121,7 +130,7 @@ class StudentFollowers(common_models.CommonModel):
     """
 
     student = models.ForeignKey(Student, help_text=u"学生")
-    follower_id = models.CharField(u"收藏者id", max_length=64, help_text=u"收藏者id")
+    customer = models.ForeignKey(Customer, null=True, help_text=u"收藏用户")
     follower_type = models.IntegerField(u"收藏者类型，目前学生仅能被教师收藏", default=FOLLOWER_TYPE.TEACHER, help_text="1：老师 2：学生")
     is_valid = models.BooleanField(u"是否有效", default=True)
 
@@ -135,7 +144,7 @@ class StudentFollowers(common_models.CommonModel):
             点击收藏学生
         :return:
         """
-        if not cls.objects.filter(is_valid=True, student=kwargs.get("student"), follower_id=kwargs.get("follower_id")).exists():
+        if not cls.objects.filter(is_valid=True, student=kwargs.get("student"), customer=kwargs.get("customer")).exists():
             student_follower = StudentFollowers(**kwargs)
             student_follower.save(force_insert=True)
             return student_follower.id

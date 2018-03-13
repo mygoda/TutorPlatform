@@ -21,7 +21,7 @@ class Teacher(common_models.CommonModel):
     school = models.ForeignKey(common_models.School, verbose_name="学校")
     phone = models.CharField(u"电话", max_length=16)
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
-    learn = models.IntegerField("学历", default=0, choices=TEACHER_LEARN)
+    learn = models.ForeignKey(common_models.Learn, default=1, verbose_name="学历")
     profession = models.CharField(u"专业", max_length=32, null=True, blank=True)
     high_score = models.IntegerField(u"高考分数", default=0)
     money = models.IntegerField(u"期望薪资", default=0, help_text="默认单位：小时")
@@ -53,24 +53,34 @@ class Teacher(common_models.CommonModel):
             添加老师
         :return:
         """
-        subjects = kwargs.pop('subjects')
-        teacher_types = kwargs.pop('teacher_types')
+        customer = kwargs.get("customer")
+        if customer.customer_type:
+            return False, '用户已注册过角色'
 
-        teacher = cls(**kwargs)
-        teacher.save(force_insert=True)
-        # 添加教师 所教 科目
-        for subject in subjects:
-            subject["teacher"] = teacher
-            teacher_subject = TeacherSubjectsShip(**subject)
-            teacher_subject.save()
+        if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
 
-        # 添加教师 教学特点
-        for teacher_type in teacher_types:
-            teacher_type["teacher"] = teacher
-            teacher_type_ship = TeacherTypesShip(**teacher_type)
-            teacher_type_ship.save()
+            subjects = kwargs.pop('subjects')
+            teacher_types = kwargs.pop('teacher_types')
 
-        return teacher.id
+            teacher = cls(**kwargs)
+            teacher.save(force_insert=True)
+            # 添加教师 所教 科目
+            for subject in subjects:
+                subject["teacher"] = teacher
+                teacher_subject = TeacherSubjectsShip(**subject)
+                teacher_subject.save()
+
+            # 添加教师 教学特点
+            for teacher_type in teacher_types:
+                teacher_type["teacher"] = teacher
+                teacher_type_ship = TeacherTypesShip(**teacher_type)
+                teacher_type_ship.save()
+
+            # 变更用户角色
+            if teacher.customer.change_type(1):
+                return True, teacher.id
+            return False, '用户变更教师失败'
+        return False, '%s 已存在' % kwargs.get("phone")
 
     def delete_teacher(self):
         """
@@ -81,7 +91,10 @@ class Teacher(common_models.CommonModel):
         if self.is_valid:
             self.is_valid = False
             self.save()
-        return
+
+            self.customer.change_type()
+        self.teachersubjectsship_set.all()
+
 
 class TeacherSubjectsShip(common_models.CommonModel):
 
@@ -108,7 +121,7 @@ class TeacherFollowers(common_models.CommonModel):
     """
 
     teacher = models.ForeignKey(Teacher, help_text=u"教师")
-    follower_id = models.CharField(u"收藏者id", max_length=64, help_text=u"收藏者id")
+    customer = models.ForeignKey(Customer, null=True, help_text=u"收藏用户")
     follower_type = models.IntegerField(u"收藏者类型, 目前教师仅能被学生收藏", default=FOLLOWER_TYPE.STUDENT, help_text="1：老师 2：学生")
     is_valid = models.BooleanField(u"是否有效", default=True)
 
@@ -122,7 +135,7 @@ class TeacherFollowers(common_models.CommonModel):
             点击收藏 教师
         :return:
         """
-        if not cls.objects.filter(is_valid=True, teacher=kwargs.get("teacher"), follower_id=kwargs.get("follower_id")).exists():
+        if not cls.objects.filter(is_valid=True, teacher=kwargs.get("teacher"), customer=kwargs.get("customer")).exists():
             student_follower = cls(**kwargs)
             student_follower.save(force_insert=True)
             return student_follower.id

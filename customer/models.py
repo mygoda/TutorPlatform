@@ -30,8 +30,38 @@ class Customer(common_models.CommonModel):
     @property
     def user_favorites(self):
         if self.customer_type == 1:
-            return self.teacher_set.first().followers()
+            # 当用户为教师时，只显示收藏的学生
+            student_followers = []
+            for follower in self.studentfollowers_set.filter(is_valid=True):
+                student = {}
+                student['student_id'] = follower.student.id
+                student['student_name'] = follower.student.name
+                student['student_subject'] = follower.student.subject.name
+                student_followers.append(student)
+            return student_followers
         elif self.customer_type == 2:
-            return self.student_set.first().followers()
+            # 当用户为学生时，只显示收藏的教师
+            teacher_followers = []
+            for follower in self.teacherfollowers_set.filter(is_valid=True):
+                teacher = {}
+                teacher['teacher_id'] = follower.teacher.id
+                teacher['teacher_name'] = follower.teacher.last_name
+                teacher['teacher_subject'] = [{"name": subject.subject.name} for subject in follower.teacher.teachersubjectsship_set.all()]
+                teacher_followers.append(teacher)
+            return teacher_followers
         else:
             return []
+
+    def change_type(self, user_type=0):
+        """
+            变更 用户身份
+        :param type:
+        :return:
+        """
+        if not self.customer_type:
+            self.customer_type = int(user_type)
+            self.save()
+            return self.id
+        if self.customer_type and not user_type:
+            self.customer_type = 0
+            self.save()

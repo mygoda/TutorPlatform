@@ -73,16 +73,13 @@ class StudentViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         print('start create student info %s' % params)
-        student_phone = params.get("phone")
-        # customer = params.get("customer")
-
         # 新增student
-        student_id = student_models.Student.add_student(**params)
-        if student_id:
-            print('add student %s success' % student_id)
-            return Response({'status': 1, 'student_id': student_id})
-        print('phone %s is already exists' % student_phone)
-        return Response({'status': 0, 'msg': '%s 已存在' % student_phone})
+        status, msg = student_models.Student.add_student(**params)
+        if status:
+            print('add student %s success' % msg)
+            return Response({'status': 1, 'student_id': msg})
+        print('add student %s error msg %s' % (params, msg))
+        return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
         """

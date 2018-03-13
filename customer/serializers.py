@@ -10,7 +10,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         用户序列化
     """
 
-    user_favorites = serializers.CharField()
+    user_favorites = serializers.ListField()
 
     class Meta:
         model = models.Customer
