@@ -45,33 +45,33 @@ class TeacherViewset(viewsets.ModelViewSet):
             创建教师    
         :param request:    
         :param args:    
-        :param kwargs:{    
-            customer: 用户id    
-            last_name: 教师姓氏    
-            city: 城市id    
-            school: 学校id    
-            phone: 电话    
-            sex: 性别    /0：女 1：男    
-            learn: 学历    
-            profession: 专业    
-            high_score: 高考分数    
-            money: 期望薪资 /默认单位：小时    
-            head_image: 头像    
-            subjects: [    
-                {"subject": 1},    
-                {}    
-            ],    
+        :param kwargs:{
+            customer: 5             用户id
+            last_name: 谷           教师姓氏
+            city: 1                 城市id
+            school: 1               学校id
+            phone: '15201170495'    教师电话
+            sex: 1                  性别    /0：女 1：男
+            learn: 1                学历id
+            profession: 计算机       专业
+            high_score: 500         高考分数
+            money: 100              期望薪资 /默认单位：小时
+            head_image: ''          头像地址
+            subjects: [
+                {"subject": 1},
+                {"subject": 2}
+            ],                      擅长科目id list
             teacher_types: [
                 {'teacher_type': 1},
-                {}
-            ],
+                {'teacher_type': 2}
+            ],                      教师特点id list
             self_introduction: 自我介绍
         }
                   
-        :return:{    
-                status: 返回状态  True/Fasle    
-                teacher_id: 教师id    
-            }    
+        :return:{
+                status: 0/1         返回状态  目前0失败，1成功
+                teacher_id: 1       新增的教师id
+            }
         """    
         # 序列化参数    
         data = request.data
@@ -111,7 +111,8 @@ class TeacherViewset(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """
             获取教师list
-            支持分页
+            支持分页，默认每页20条
+            当has_next 为 false 时，表示没有下一页了
         :param request:
         :param args:
         :param kwargs:
@@ -153,13 +154,13 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         :param request:
         :param args:
         :param kwargs:{
-              "teacher": "1",
-              "follower_id": "1"
+              "teacher": ",             被收藏教师id
+              "customer": 1             操作的用户id
             }
         :return: {
-            'status': 0,
-            'teacher_follower_id': 收藏id,
-            'msg': '失败时信息'
+            'status': 0/1,              返回状态  目前0失败，1成功
+            'teacher_follower_id': 1    收藏id,
+            'msg': '收藏失败'            失败时信息
         }
         """
 
