@@ -36,6 +36,10 @@ router.register(r"subject", common_views.SubjectViewset, base_name="subject_api"
 router.register(r"baselevel", common_views.BaseLevelViewset, base_name="baselevel_api")
 router.register(r"level", common_views.LevelViewset, base_name="level_api")
 router.register(r"school", common_views.SchoolViewset, base_name="school_api")
+router.register(r"teacher_type", common_views.TeacherTypeViewset, base_name="teacher_type_api")
+router.register(r"student_type", common_views.StudentTypeViewset, base_name="student_type_api")
+# customer api
+router.register(r"customer", customer_views.CustomerViewset, base_name="customer_api")
 # student api
 router.register(r"students", student_views.StudentViewset, base_name="student_api")
 router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")
@@ -47,7 +51,7 @@ router.register(r"teacher", teacher_views.TeacherViewset, base_name="teacher_api
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    url(r'^api/upload', common_views.upload),
+    # url(r'^api/upload', common_views.upload),
     url(r'^docs/', schema_view),
 
 ]

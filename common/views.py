@@ -109,3 +109,35 @@ class SchoolViewset(viewsets.ModelViewSet):
         """
         return common_serializers.SchoolSerializer
 
+
+class TeacherTypeViewset(viewsets.ModelViewSet):
+    """
+        教师特点 api view
+    """
+
+    def get_queryset(self):
+        return common_models.TeacherType.objects.filter()
+
+    def get_serializer_class(self):
+        """
+            获取 学校 序列化
+        :return:
+        """
+        return common_serializers.TeacherTypeSerializer
+
+
+class StudentTypeViewset(viewsets.ModelViewSet):
+    """
+        学生不足 api view
+    """
+
+    def get_queryset(self):
+        return common_models.StudentType.objects.filter()
+
+    def get_serializer_class(self):
+        """
+            获取 学校 序列化
+        :return:
+        """
+        return common_serializers.StudentTypeSerializer
+

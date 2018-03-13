@@ -82,11 +82,11 @@ class TeacherViewset(viewsets.ModelViewSet):
         teacher_phone = params.get("phone")
         if teacher_models.Teacher.objects.filter(phone=teacher_phone, is_valid=True).exists():
             print('phone %s is already exists' % teacher_phone)
-            return Response({'status': False, 'msg': '%s 已存在' % teacher_phone})
+            return Response({'status': 0, 'msg': '%s 已存在' % teacher_phone})
         # 新增教师
         teacher_id = teacher_models.Teacher.add_teacher(**params)
         print('add teacher %s success' % teacher_id)
-        return Response({'status': True, 'teacher_id': teacher_id})
+        return Response({'status': 1, 'teacher_id': teacher_id})
 
     def update(self, request, pk=None):
         """
@@ -108,7 +108,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         teacher = teacher_models.Teacher.objects.get(id=pk)
         teacher.delete_teacher()
         print('delete teacher %s success' % pk)
-        return Response({'status': True, 'teacher_id': pk})
+        return Response({'status': 1, 'teacher_id': pk})
 
     def list(self, request, *args, **kwargs):
         """
@@ -133,7 +133,7 @@ class TeacherViewset(viewsets.ModelViewSet):
 
 class TeacherFollowerViewset(viewsets.ModelViewSet):
     """
-        学生收藏api
+        教师收藏api
     """
 
     def get_queryset(self):
@@ -158,7 +158,11 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
               "teacher": "1",
               "follower_id": "1"
             }
-        :return:
+        :return: {
+            'status': 0,
+            'teacher_follower_id': 收藏id,
+            'msg': '失败时信息'
+        }
         """
 
         data = request.data
@@ -170,4 +174,5 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         if teacher_follower_id:
             return Response({'status': True, 'teacher_follower_id': teacher_follower_id})
         print("add teacher follower error, is already exists. params: %s" % params)
-        return Response({'status': False, 'msg': '收藏失败'})
+        return Response({'status': 0, 'msg': '收藏失败'})
+

@@ -74,13 +74,15 @@ class StudentViewset(viewsets.ModelViewSet):
         params = serializer.validated_data
         print('start create student info %s' % params)
         student_phone = params.get("phone")
-        if student_models.Student.objects.filter(phone=student_phone, is_valid=True).exists():
-            print('phone %s is already exists' % student_phone)
-            return Response({'status': False, 'msg': '%s 已存在' % student_phone})
+        # customer = params.get("customer")
+
         # 新增student
         student_id = student_models.Student.add_student(**params)
-        print('add student %s success' % student_id)
-        return Response({'status': True, 'student_id': student_id})
+        if student_id:
+            print('add student %s success' % student_id)
+            return Response({'status': 1, 'student_id': student_id})
+        print('phone %s is already exists' % student_phone)
+        return Response({'status': 0, 'msg': '%s 已存在' % student_phone})
 
     def destroy(self, request, pk=None):
         """
@@ -93,7 +95,7 @@ class StudentViewset(viewsets.ModelViewSet):
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
         print('delete student %s success' % pk)
-        return Response({'status': True, 'student_id': pk})
+        return Response({'status': 1, 'student_id': pk})
 
     def list(self, request, *args, **kwargs):
         """
@@ -151,9 +153,9 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         print('start add student followers info %s' % params)
         student_follower_id = student_models.StudentFollowers.add_student_follower(**params)
         if student_follower_id:
-            return Response({'status': True, 'student_follower_id': student_follower_id})
+            return Response({'status': 1, 'student_follower_id': student_follower_id})
         print("add student follower error, is already exists. params: %s" % params)
-        return Response({'status': False, 'msg': '收藏失败'})
+        return Response({'status': 0, 'msg': '收藏失败'})
 
 
 

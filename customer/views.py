@@ -16,3 +16,19 @@ from . import serializers as customer_serializers
 logger = logging.getLogger(__name__)
 # Create your views here.
 
+
+class CustomerViewset(viewsets.ModelViewSet):
+    """
+        用户 api
+    """
+
+    def get_queryset(self):
+        return customer_models.Customer.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取序列化
+        :return:
+        """
+
+        return customer_serializers.CustomerSerializer

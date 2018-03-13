@@ -60,24 +60,26 @@ class Student(common_models.CommonModel):
         :return:
         """
 
-        teacher_types = kwargs.pop('teacher_types')
-        student_types = kwargs.pop('student_types')
+        if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
+            teacher_types = kwargs.pop('teacher_types')
+            student_types = kwargs.pop('student_types')
 
-        student = cls(**kwargs)
-        student.save(force_insert=True)
+            student = cls(**kwargs)
+            student.save(force_insert=True)
 
-        # 添加学生对教师的要求 教学特点
-        for teacher_type in teacher_types:
-            teacher_type["student"] = student
-            teacher_type_ship = StudentTeacherTypes(**teacher_type)
-            teacher_type_ship.save()
+            # 添加学生对教师的要求 教学特点
+            for teacher_type in teacher_types:
+                teacher_type["student"] = student
+                teacher_type_ship = StudentTeacherTypes(**teacher_type)
+                teacher_type_ship.save()
 
-        # 添加学生的不足 学生不足
-        for student_type in student_types:
-            student_type["student"] = student
-            student_type_ship = StudentTypesShip(**student_type)
-            student_type_ship.save()
-        return student.id
+            # 添加学生的不足 学生不足
+            for student_type in student_types:
+                student_type["student"] = student
+                student_type_ship = StudentTypesShip(**student_type)
+                student_type_ship.save()
+
+            return student.id
 
     def delete_student(self):
         """
@@ -128,12 +130,12 @@ class StudentFollowers(common_models.CommonModel):
         verbose_name_plural = verbose_name
 
     @classmethod
-    def add_student_follower(self, **kwargs):
+    def add_student_follower(cls, **kwargs):
         """
             点击收藏学生
         :return:
         """
-        if not StudentFollowers.objects.filter(is_valid=True, student=kwargs.get("student"), follower_id=kwargs.get("follower_id")).exists():
+        if not cls.objects.filter(is_valid=True, student=kwargs.get("student"), follower_id=kwargs.get("follower_id")).exists():
             student_follower = StudentFollowers(**kwargs)
             student_follower.save(force_insert=True)
             return student_follower.id
