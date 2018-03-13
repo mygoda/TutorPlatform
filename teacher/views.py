@@ -45,34 +45,34 @@ class TeacherViewset(viewsets.ModelViewSet):
             创建教师    
         :param request:    
         :param args:    
-        :param kwargs:{
-            customer: 5             用户id
-            last_name: 谷           教师姓氏
-            city: 1                 城市id
-            school: 1               学校id
-            phone: '15201170495'    教师电话
-            sex: 1                  性别    /0：女 1：男
-            learn: 1                学历id
-            profession: 计算机       专业
-            high_score: 500         高考分数
-            money: 100              期望薪资 /默认单位：小时
-            head_image: ''          头像地址
-            subjects: [
-                {"subject": 1},
-                {"subject": 2}
-            ],                      擅长科目id list
-            teacher_types: [
-                {'teacher_type': 1},
-                {'teacher_type': 2}
-            ],                      教师特点id list
-            self_introduction: 自我介绍
-        }
+        :param kwargs:{                    
+            customer: 5             用户id          
+            last_name: 谷           教师姓氏          
+            city: 1                 城市id         
+            school: 1               学校id         
+            phone: '15201170495'    教师电话               
+            sex: 1                  性别    /0：女 1：男           
+            learn: 1                学历id             
+            profession: 计算机       专业          
+            high_score: 500         高考分数            
+            money: 100              期望薪资 /默认单位：小时          
+            head_image: ''          头像地址             
+            subjects: [                 
+                {"subject": 1},              
+                {"subject": 2}                    
+            ],                      擅长科目id list            
+            teacher_types: [          
+                {'teacher_type': 1},           
+                {'teacher_type': 2}                   
+            ],                      教师特点id list          
+            self_introduction: 自我介绍          
+        }          
                   
-        :return:{
-                status: 0/1         返回状态  目前0失败，1成功
-                teacher_id: 1       新增的教师id
-            }
-        """    
+        :return:{           
+                status: 0/1         返回状态  目前0失败，1成功          
+                teacher_id: 1       新增的教师id           
+            }         
+        """        
         # 序列化参数    
         data = request.data
         serializer = self.get_serializer(data=data)
@@ -88,19 +88,19 @@ class TeacherViewset(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         """
-            修改教师
-        :param request:
-        :param pk:
-        :return:
+            修改教师         
+        :param request:         
+        :param pk:         
+        :return:           
         """
         pass
 
     def destroy(self, request, pk=None):
         """
-            删除老师
-        :param request:
-        :param pk: 教师id
-        :return:
+            删除老师          
+        :param request:       
+        :param pk: 教师id         
+        :return:            
         """
         print('start delete teacher %s' % pk)
         teacher = teacher_models.Teacher.objects.get(id=pk)
@@ -110,13 +110,13 @@ class TeacherViewset(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """
-            获取教师list
-            支持分页，默认每页20条
-            当has_next 为 false 时，表示没有下一页了
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
+            获取教师list            
+            支持分页，默认每页20条                     
+            当has_next 为 false 时，表示没有下一页了           
+        :param request:          
+        :param args:             
+        :param kwargs:             
+        :return:           
         """
         # 获取 教师 queryset
         queryset = self.get_queryset()
@@ -150,19 +150,19 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-            点击收藏  教师
-        :param request:
-        :param args:
-        :param kwargs:{
-              "teacher": ",             被收藏教师id
-              "customer": 1             操作的用户id
-            }
-        :return: {
-            'status': 0/1,              返回状态  目前0失败，1成功
-            'teacher_follower_id': 1    收藏id,
-            'msg': '收藏失败'            失败时信息
-        }
-        """
+            点击收藏  教师          
+        :param request:           
+        :param args:           
+        :param kwargs:{                 
+              "teacher": ",             被收藏教师id          
+              "customer": 1             操作的用户id          
+            }           
+        :return: {              
+            'status': 0/1,              返回状态  目前0失败，1成功            
+            'teacher_follower_id': 1    收藏id,             
+            'msg': '收藏失败'            失败时信息            
+        }              
+        """    
 
         data = request.data
         serializer = self.get_serializer(data=data)
