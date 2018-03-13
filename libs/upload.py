@@ -19,6 +19,5 @@ def upload_url_to_qiniu(key, url):
 
 def upload_stream_to_qiniu(key, data):
     token = q.upload_token(bucket_name, key, 3600)
-
     ret, info = put_data(token, key, data)
     return "{base_url}{key}".format(base_url=base_url, key=key)
