@@ -53,7 +53,7 @@ router.register(r"teacher", teacher_views.TeacherViewset, base_name="teacher_api
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    # url(r'^api/upload', common_views.upload),
+    url(r'^api/upload/', common_views.upload_file),
     url(r'^docs/', schema_view),
 
 ]
