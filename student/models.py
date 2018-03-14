@@ -148,3 +148,12 @@ class StudentFollowers(common_models.CommonModel):
             student_follower = StudentFollowers(**kwargs)
             student_follower.save(force_insert=True)
             return student_follower.id
+
+    def delete_student_follower(self):
+        """
+            删除 学生 收藏
+        :return:
+        """
+        if self.is_valid:
+            self.is_valid = False
+            self.save()

@@ -184,3 +184,15 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         print("add teacher follower error, is already exists. params: %s" % params)
         return Response({'status': 0, 'msg': '收藏失败'})
 
+    def destroy(self, request, pk=None):
+        """
+            删除 教师 的收藏
+        :param request:
+        :param pk: 收藏id
+        :return:
+        """
+        print('start delete teacher follower %s' % pk)
+        teacher_follower = teacher_models.TeacherFollowers.objects.get(id=pk)
+        teacher_follower.delete_teacher_follower()
+        print('delete teacher follower %s success' % pk)
+        return Response({'status': 1, 'teacher_id': pk})

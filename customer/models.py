@@ -34,6 +34,7 @@ class Customer(common_models.CommonModel):
             student_followers = []
             for follower in self.studentfollowers_set.filter(is_valid=True):
                 student = {}
+                student['id'] = follower.id
                 student['student_id'] = follower.student.id
                 student['student_name'] = follower.student.name
                 student['student_subject'] = follower.student.subject.name
@@ -44,6 +45,7 @@ class Customer(common_models.CommonModel):
             teacher_followers = []
             for follower in self.teacherfollowers_set.filter(is_valid=True):
                 teacher = {}
+                teacher['id'] = follower.id
                 teacher['teacher_id'] = follower.teacher.id
                 teacher['teacher_name'] = follower.teacher.last_name
                 teacher['teacher_subject'] = [{"name": subject.subject.name} for subject in follower.teacher.teachersubjectsship_set.all()]
