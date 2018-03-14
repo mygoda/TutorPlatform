@@ -106,8 +106,16 @@ class StudentViewset(viewsets.ModelViewSet):
         :param kwargs:       
         :return:         
         """
-
         queryset = self.get_queryset()
+        # 实现filter
+        data = request.GET
+        if data.get('city', ''):
+            queryset = queryset.filter(city_id=data.get('city'))
+        if data.get('baselevel', ''):
+            queryset = queryset.filter(level__base_id=data.get('baselevel'))
+        if data.get('subject', ''):
+            queryset = queryset.filter(subject_id=data.get('subject'))
+
         page = self.paginate_queryset(queryset=queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

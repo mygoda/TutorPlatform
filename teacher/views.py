@@ -120,6 +120,15 @@ class TeacherViewset(viewsets.ModelViewSet):
         """
         # 获取 教师 queryset
         queryset = self.get_queryset()
+        # 实现filter
+        data = request.GET
+        if data.get('city', ''):
+            queryset = queryset.filter(city_id=data.get('city'))
+        if data.get('school', ''):
+            queryset = queryset.filter(school_id=data.get('school'))
+        if data.get('subject', ''):
+            queryset = queryset.filter(teachersubjectsship__subject__id=data.get('subject'))
+
         # 获取分页信息
         page = self.paginate_queryset(queryset=queryset)
         if page is not None:
