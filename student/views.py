@@ -74,7 +74,7 @@ class StudentViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
-        print('start create student info %s' % params)
+        # print('start create student info %s' % params)
         # 新增student
         status, msg = student_models.Student.add_student(**params)
         if status:
