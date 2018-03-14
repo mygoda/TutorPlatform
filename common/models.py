@@ -56,6 +56,7 @@ class Subject(CommonModel):
     """科目"""
 
     name = models.CharField(u"科目", max_length=16)
+    checked = models.BooleanField(u"是否选中", default=False)
 
     # def __unicode__(self):
     #     return self.name
@@ -139,6 +140,7 @@ class TeacherType(CommonModel):
     """
 
     name = models.CharField(u"特点", max_length=200)
+    checked = models.BooleanField(u"是否选中", default=False)
 
     class Meta:
         verbose_name = u'教师特点'
@@ -151,6 +153,7 @@ class StudentType(CommonModel):
     """
 
     name = models.CharField(u"存在问题", max_length=200)
+    checked = models.BooleanField(u"是否选中", default=False)
 
     class Meta:
         verbose_name = u'学生存在问题'
