@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 """
     家教老师 api
 """
@@ -78,12 +78,12 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
-        print('start create teacher info %s' % params)
+        # print('start create teacher info %s' % params)
         status, msg = teacher_models.Teacher.add_teacher(**params)
         if status:
             print('add teacher %s success' % msg)
             return Response({'status': 1, 'teacher_id': msg})
-        print('add teacher %s error msg %s' % (params, msg))
+        # print('add teacher %s error msg %s' % (params, msg))
         return Response({'status': 0, 'msg': msg})
 
     def update(self, request, pk=None):
