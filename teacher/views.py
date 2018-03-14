@@ -36,7 +36,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         elif self.action == "list":
             return teacher_serializers.TeacherSerializer
         elif self.action == "update":
-            return teacher_serializers.CreateTeacherSerializer
+            return teacher_serializers.UpdateTeacherSerializer
         else:
             return teacher_serializers.TeacherSerializer
 
@@ -93,7 +93,13 @@ class TeacherViewset(viewsets.ModelViewSet):
         :param pk:         
         :return:           
         """
-        pass
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        update_teacher = teacher_models.Teacher.objects.get(id=pk)
+        update_teacher.update_teacher(**params)
+        return Response({'status': 1, 'teacher_id': pk})
 
     def destroy(self, request, pk=None):
         """
@@ -171,8 +177,7 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
             'teacher_follower_id': 1    收藏id,             
             'msg': '收藏失败'            失败时信息            
         }              
-        """    
-
+        """
         data = request.data
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)

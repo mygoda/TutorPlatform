@@ -72,6 +72,23 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# 修改教师
+
+class UpdateTeacherSerializer(serializers.ModelSerializer):
+    """
+        修改教师
+    """
+
+    phone = serializers.CharField(required=False)
+    city = serializers.CharField(required=False)
+    school = serializers.CharField(required=False)
+    subjects = CreateTeacherSubjectSerializer(required=False, many=True)
+    teacher_types = CreateTeacherTypeSerializer(required=False, many=True)
+
+    class Meta:
+        model = models.Teacher
+        fields = "__all__"
+
 # 教师被收藏序列化
 
 class CreateTeacherFollowerSerializer(serializers.ModelSerializer):

@@ -95,6 +95,24 @@ class Teacher(common_models.CommonModel):
             self.customer.change_type()
         self.teachersubjectsship_set.all()
 
+    def update_teacher(self, **kwargs):
+        """
+            修改教师
+        :param kwargs:
+        :return:
+        """
+        subjects = kwargs.pop('subjects', [])
+        # teacher_types = kwargs.pop('teacher_types', [])
+        # 添加教师 所教 科目,添加前删除以前的
+        if subjects:
+            self.teachersubjectsship_set.all().delete()
+            for subject in subjects:
+                subject["teacher"] = self
+                teacher_subject = TeacherSubjectsShip(**subject)
+                teacher_subject.save()
+        # if teacher_types:
+        Teacher.objects.filter(id=self.id).update(**kwargs)
+
 
 class TeacherSubjectsShip(common_models.CommonModel):
 
