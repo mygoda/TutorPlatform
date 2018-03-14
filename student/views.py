@@ -80,7 +80,7 @@ class StudentViewset(viewsets.ModelViewSet):
         if status:
             print('add student %s success' % msg)
             return Response({'status': 1, 'student_id': msg})
-        print('add student %s error msg %s' % (params, msg))
+        # print('add student %s error msg %s' % (params, msg))
         return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
