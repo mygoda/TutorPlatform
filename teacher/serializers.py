@@ -79,11 +79,11 @@ class UpdateTeacherSerializer(serializers.ModelSerializer):
         修改教师
     """
 
+    last_name = serializers.CharField(required=False)
     phone = serializers.CharField(required=False)
-    city = serializers.CharField(required=False)
     school = serializers.CharField(required=False)
-    subjects = CreateTeacherSubjectSerializer(required=False, many=True)
-    teacher_types = CreateTeacherTypeSerializer(required=False, many=True)
+    subjects = serializers.ListField(required=False)
+    teacher_types = serializers.ListField(required=False)
 
     class Meta:
         model = models.Teacher

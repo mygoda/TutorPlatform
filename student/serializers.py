@@ -71,6 +71,24 @@ class CreateStudentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# 修改学生
+
+class UpdateStudentSerializer(serializers.ModelSerializer):
+    """
+        修改学生
+    """
+
+    name = serializers.CharField(required=False)
+    phone = serializers.CharField(required=False)
+    level = serializers.CharField(required=False)
+    subject = serializers.CharField(required=False)
+    address = serializers.CharField(required=False)
+
+    class Meta:
+        model = models.Student
+        fields = "__all__"
+
+
 # 学生被收藏序列化
 
 class CreateStudentFollowerSerializer(serializers.ModelSerializer):

@@ -18,7 +18,7 @@ class Student(common_models.CommonModel):
 
     customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
     uid = models.CharField(u"学生ID", max_length=16, default=uuid.create_student_uid, unique=True)
-    city = models.ForeignKey(common_models.City, default=1, verbose_name="城市")
+    city = models.ForeignKey(common_models.City, null=True, blank=True, default=1, verbose_name="城市")
     name = models.CharField(u"姓名", max_length=32)
     phone = models.CharField(u"电话", max_length=16)
     level = models.ForeignKey(common_models.Level, verbose_name="年级")
@@ -107,6 +107,14 @@ class Student(common_models.CommonModel):
 
             self.customer.change_type()
         return True
+
+    def update_student(self, **kwargs):
+        """
+            修改学生
+        :param kwargs:
+        :return:
+        """
+        Student.objects.filter(id=self.id).update(**kwargs)
 
 
 class StudentTeacherTypes(common_models.CommonModel):

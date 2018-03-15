@@ -113,8 +113,10 @@ class Teacher(common_models.CommonModel):
         # 添加教师 所教 科目,添加前删除以前的
         if subjects:
             self.teachersubjectsship_set.all().delete()
-            for subject in subjects:
+            for id in subjects:
+                subject = {}
                 subject["teacher"] = self
+                subject["subject_id"] = int(id)
                 teacher_subject = TeacherSubjectsShip(**subject)
                 teacher_subject.save()
         # if teacher_types:

@@ -128,11 +128,11 @@ class TeacherViewset(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         # 实现filter
         data = request.GET
-        if int(data.get('city', '')):
+        if int(data.get('city', 0)):
             queryset = queryset.filter(city_id=data.get('city'))
-        if int(data.get('school', '')):
+        if int(data.get('school', 0)):
             queryset = queryset.filter(school_id=data.get('school'))
-        if int(data.get('subject', '')):
+        if int(data.get('subject', 0)):
             queryset = queryset.filter(teachersubjectsship__subject__id=data.get('subject'))
 
         # 获取分页信息

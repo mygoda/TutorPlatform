@@ -31,7 +31,7 @@ class StudentViewset(viewsets.ModelViewSet):
         elif self.action == "list":
             return student_serializers.StudentSerializer
         elif self.action == "update":
-            return student_serializers.StudentSerializer
+            return student_serializers.UpdateStudentSerializer
         else:
             return student_serializers.StudentSerializer
 
@@ -96,6 +96,22 @@ class StudentViewset(viewsets.ModelViewSet):
         print('delete student %s success' % pk)
         return Response({'status': 1, 'student_id': pk})
 
+    def update(self, request, pk=None):
+        """
+            修改学生
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        update_student = student_models.Student.objects.get(id=pk)
+        update_student.update_student(**params)
+        return Response({'status': 1, 'student_id': pk})
+
     def list(self, request, *args, **kwargs):
         """
             获取学生list              
@@ -109,11 +125,11 @@ class StudentViewset(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         # 实现filter
         data = request.GET
-        if int(data.get('city', '')):
+        if int(data.get('city', 0)):
             queryset = queryset.filter(city_id=data.get('city'))
-        if int(data.get('baselevel', '')):
+        if int(data.get('baselevel', 0)):
             queryset = queryset.filter(level__base_id=data.get('baselevel'))
-        if int(data.get('subject', '')):
+        if int(data.get('subject', 0)):
             queryset = queryset.filter(subject_id=data.get('subject'))
 
         page = self.paginate_queryset(queryset=queryset)
