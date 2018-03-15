@@ -64,8 +64,8 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
         创建老师
     """
 
-    subjects = CreateTeacherSubjectSerializer(many=True)
-    teacher_types = CreateTeacherTypeSerializer(many=True)
+    subjects = serializers.ListField(required=True)
+    teacher_types = serializers.ListField(required=True)
 
     class Meta:
         model = models.Teacher

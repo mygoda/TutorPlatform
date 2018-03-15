@@ -59,20 +59,24 @@ class Teacher(common_models.CommonModel):
 
         if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
 
-            subjects = kwargs.pop('subjects')
-            teacher_types = kwargs.pop('teacher_types')
+            subjects = kwargs.pop('subjects', [])
+            teacher_types = kwargs.pop('teacher_types', [])
 
             teacher = cls(**kwargs)
             teacher.save(force_insert=True)
             # 添加教师 所教 科目
-            for subject in subjects:
+            for id in subjects:
+                subject = {}
                 subject["teacher"] = teacher
+                subject["subject_id"] = int(id)
                 teacher_subject = TeacherSubjectsShip(**subject)
                 teacher_subject.save()
 
             # 添加教师 教学特点
-            for teacher_type in teacher_types:
+            for id in teacher_types:
+                teacher_type = {}
                 teacher_type["teacher"] = teacher
+                teacher_type["teacher_type_id"] = int(id)
                 teacher_type_ship = TeacherTypesShip(**teacher_type)
                 teacher_type_ship.save()
 
