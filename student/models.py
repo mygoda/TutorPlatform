@@ -18,14 +18,14 @@ class Student(common_models.CommonModel):
 
     customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
     uid = models.CharField(u"学生ID", max_length=16, default=uuid.create_student_uid, unique=True)
-    city = models.ForeignKey(common_models.City, verbose_name="城市")
+    city = models.ForeignKey(common_models.City, default=1, verbose_name="城市")
     name = models.CharField(u"姓名", max_length=32)
     phone = models.CharField(u"电话", max_length=16)
     level = models.ForeignKey(common_models.Level, verbose_name="年级")
     subject = models.ForeignKey(common_models.Subject, verbose_name="学科")
     study = models.CharField(u"学习情况", max_length=32, null=True, blank=True)
     basis = models.ForeignKey(common_models.Basis, default=1, verbose_name="学生基础")
-    times = models.IntegerField(u"补习次数", default=1, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
+    times = models.CharField(u"补习次数", default="一周一次", max_length=64, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
 
@@ -68,21 +68,25 @@ class Student(common_models.CommonModel):
             return False, '用户已注册过角色'
 
         if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
-            teacher_types = kwargs.pop('teacher_types')
-            student_types = kwargs.pop('student_types')
+            teacher_types = kwargs.pop('teacher_types', [])
+            student_types = kwargs.pop('student_types', [])
 
             student = cls(**kwargs)
             student.save(force_insert=True)
 
             # 添加学生对教师的要求 教学特点
-            for teacher_type in teacher_types:
+            for id in teacher_types:
+                teacher_type = {}
                 teacher_type["student"] = student
+                teacher_type["teacher_type_id"] = id
                 teacher_type_ship = StudentTeacherTypes(**teacher_type)
                 teacher_type_ship.save()
 
             # 添加学生的不足 学生不足
-            for student_type in student_types:
+            for id in student_types:
+                student_type = {}
                 student_type["student"] = student
+                student_type["student_type_id"] = id
                 student_type_ship = StudentTypesShip(**student_type)
                 student_type_ship.save()
             # 变更用户角色

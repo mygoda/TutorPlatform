@@ -109,11 +109,11 @@ class StudentViewset(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         # 实现filter
         data = request.GET
-        if data.get('city', ''):
+        if int(data.get('city', '')):
             queryset = queryset.filter(city_id=data.get('city'))
-        if data.get('baselevel', ''):
+        if int(data.get('baselevel', '')):
             queryset = queryset.filter(level__base_id=data.get('baselevel'))
-        if data.get('subject', ''):
+        if int(data.get('subject', '')):
             queryset = queryset.filter(subject_id=data.get('subject'))
 
         page = self.paginate_queryset(queryset=queryset)

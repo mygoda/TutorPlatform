@@ -64,8 +64,8 @@ class CreateStudentSerializer(serializers.ModelSerializer):
     """
         创建学生
     """
-    student_types = CreateStudentTypeSerializer(many=True)
-    teacher_types = CreateStudentTeacherTypeSerializer(many=True)
+    student_types = serializers.ListField(required=True)
+    teacher_types = serializers.ListField(required=True)
     class Meta:
         model = models.Student
         fields = "__all__"
