@@ -54,6 +54,9 @@ class Teacher(common_models.CommonModel):
         :return:
         """
         customer = kwargs.get("customer")
+        if not customer:
+            customer = Customer.add()
+            kwargs["customer"] = customer
         if customer.customer_type:
             return False, '用户已注册过角色'
 

@@ -17,7 +17,7 @@ class Customer(common_models.CommonModel):
         (2, '学生')
     )
 
-    user = models.OneToOneField(User)
+    # user = models.OneToOneField(User)
     uuid = models.CharField(u"微信ID", max_length=64, unique=True)
     nickname = models.CharField(u"微信名称", max_length=64, null=True, blank=True)
     avatar_url = models.URLField("头像", help_text="头像", null=True, blank=True)
@@ -67,3 +67,15 @@ class Customer(common_models.CommonModel):
         if self.customer_type and not user_type:
             self.customer_type = 0
             self.save()
+
+
+    @classmethod
+    def add(cls):
+        from libs.uuid import create_uuid
+        kwargs = {
+            "uuid": create_uuid(),
+            "nickname": 'customer'
+        }
+        cus = cls(**kwargs)
+        cus.save()
+        return cus
