@@ -17,7 +17,7 @@ class Teacher(common_models.CommonModel):
     customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
     uid = models.CharField(u"教师ID", max_length=16, default=uuid.create_teacher_uid, unique=True)
     last_name = models.CharField(u"姓氏", max_length=4)
-    city = models.ForeignKey(common_models.City, verbose_name="城市")
+    city = models.ForeignKey(common_models.City, null=True, blank=True, default=1, verbose_name="城市")
     school = models.ForeignKey(common_models.School, verbose_name="学校")
     phone = models.CharField(u"电话", max_length=16)
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
