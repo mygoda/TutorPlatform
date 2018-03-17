@@ -24,25 +24,27 @@ class SubjectSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BaseLevelSerializer(serializers.ModelSerializer):
-    """
-        年级 序列化
-    """
-
-    class Meta:
-        model = models.BaseLevel
-        fields = "__all__"
-
-
 class LevelSerializer(serializers.ModelSerializer):
     """
         学校等级 序列化
     """
 
-    base = BaseLevelSerializer()
+    # base = BaseLevelSerializer()
 
     class Meta:
         model = models.Level
+        fields = "__all__"
+
+
+class BaseLevelSerializer(serializers.ModelSerializer):
+    """
+        年级 序列化
+    """
+
+    level = LevelSerializer(many=True)
+
+    class Meta:
+        model = models.BaseLevel
         fields = "__all__"
 
 

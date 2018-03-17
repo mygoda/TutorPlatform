@@ -78,6 +78,10 @@ class BaseLevel(CommonModel):
         verbose_name = u'学校等级'
         verbose_name_plural = verbose_name
 
+    @property
+    def level(self):
+        return self.level_set.all()
+
 
 class Level(CommonModel):
     """年级"""
