@@ -33,6 +33,7 @@ class StudentSerializer(serializers.ModelSerializer):
     city = common_serializer.CitySerializer()
     subject = common_serializer.SubjectSerializer()
     level = common_serializer.LevelSerializer()
+    require = common_serializer.TeacherRequireSerializer()
     student_types = StudentTypeSerializer(many=True)
     teacher_types = StudentTeacherTypeSerializer(many=True)
     follower_count = serializers.IntegerField()
