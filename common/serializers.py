@@ -26,7 +26,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
 class LevelSerializer(serializers.ModelSerializer):
     """
-        学校等级 序列化
+        年级 序列化
     """
 
     # base = BaseLevelSerializer()
@@ -38,7 +38,7 @@ class LevelSerializer(serializers.ModelSerializer):
 
 class BaseLevelSerializer(serializers.ModelSerializer):
     """
-        年级 序列化
+        学校等级,年级 序列化
     """
 
     level = LevelSerializer(many=True)
@@ -46,6 +46,16 @@ class BaseLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BaseLevel
         fields = "__all__"
+
+
+class BaseSchoolSerializer(serializers.ModelSerializer):
+    """
+        学校等级 序列化
+    """
+
+    class Meta:
+        model = models.BaseLevel
+        fields = ('id', 'name')
 
 
 class BasisSerializer(serializers.ModelSerializer):
