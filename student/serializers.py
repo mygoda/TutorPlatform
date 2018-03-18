@@ -43,6 +43,7 @@ class StudentSerializer(serializers.ModelSerializer):
     city = common_serializer.CitySerializer()
     subjects = StudentSubjectSerializer(many=True)
     level = common_serializer.LevelSerializer()
+    basis = common_serializer.BasisSerializer()
     baselevel = common_serializer.BaseLevelSerializer()
     require = common_serializer.TeacherRequireSerializer()
     student_types = StudentTypeSerializer(many=True)
