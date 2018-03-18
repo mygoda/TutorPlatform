@@ -128,9 +128,9 @@ class StudentViewset(viewsets.ModelViewSet):
         if int(data.get('city', 0)):
             queryset = queryset.filter(city_id=data.get('city'))
         if int(data.get('baselevel', 0)):
-            queryset = queryset.filter(level__base_id=data.get('baselevel'))
+            queryset = queryset.filter(baselevel_id=data.get('baselevel'))
         if int(data.get('subject', 0)):
-            queryset = queryset.filter(subject_id=data.get('subject'))
+            queryset = queryset.filter(studentsubjectsship__subject__id=data.get('subject'))
 
         page = self.paginate_queryset(queryset=queryset)
         if page is not None:

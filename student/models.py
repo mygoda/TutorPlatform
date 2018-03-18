@@ -22,7 +22,7 @@ class Student(common_models.CommonModel):
     name = models.CharField(u"姓名", max_length=32)
     phone = models.CharField(u"电话", max_length=16)
     level = models.ForeignKey(common_models.Level, verbose_name="年级")
-    subject = models.ForeignKey(common_models.Subject, verbose_name="学科")
+    baselevel = models.ForeignKey(common_models.BaseLevel, default=1, verbose_name="年级")
     basis = models.ForeignKey(common_models.Basis, default=1, verbose_name="学生基础")
     times = models.CharField(u"补习次数", default="一周一次", max_length=64, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
@@ -40,6 +40,10 @@ class Student(common_models.CommonModel):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def subjects(self):
+        return self.studentsubjectsship_set.all()
 
     @property
     def student_types(self):
@@ -69,6 +73,7 @@ class Student(common_models.CommonModel):
         if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
             teacher_types = kwargs.pop('teacher_types', [])
             student_types = kwargs.pop('student_types', [])
+            subjects = kwargs.pop('subjects', [])
 
             student = cls(**kwargs)
             student.save(force_insert=True)
@@ -88,6 +93,14 @@ class Student(common_models.CommonModel):
                 student_type["student_type_id"] = id
                 student_type_ship = StudentTypesShip(**student_type)
                 student_type_ship.save()
+
+            # 添加学生 所教 科目
+            for id in subjects:
+                subject = {}
+                subject["student"] = student
+                subject["subject_id"] = int(id)
+                student_subject = StudentSubjectsShip(**subject)
+                student_subject.save()
             # 变更用户角色
             if student.customer.change_type(2):
                 return True, student.id
@@ -113,7 +126,25 @@ class Student(common_models.CommonModel):
         :param kwargs:
         :return:
         """
+        subjects = kwargs.pop('subjects', [])
+        if subjects:
+            self.studentsubjectsship_set.all().delete()
+            for id in subjects:
+                subject = {}
+                subject["student"] = self
+                subject["subject_id"] = int(id)
+                student_subject = StudentSubjectsShip(**subject)
+                student_subject.save()
         Student.objects.filter(id=self.id).update(**kwargs)
+
+
+class StudentSubjectsShip(common_models.CommonModel):
+
+    student = models.ForeignKey(Student, verbose_name=u"学生")
+    subject = models.ForeignKey(common_models.Subject, verbose_name="学科", related_name="student_subject")
+
+    def __unicode__(self):
+        return "%s:%s" % (self.teacher.uid, self.subject.name)
 
 
 class StudentTeacherTypes(common_models.CommonModel):

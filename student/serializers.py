@@ -8,6 +8,16 @@ from common import serializers as common_serializer
 
 # get student serializer
 
+class StudentSubjectSerializer(serializers.ModelSerializer):
+    """教师学科"""
+
+    subject = common_serializer.SubjectSerializer()
+
+    class Meta:
+        model = models.StudentSubjectsShip
+        fields = ("id", "subject")
+
+
 class StudentTypeSerializer(serializers.ModelSerializer):
     """ 学生的不足"""
 
@@ -31,8 +41,9 @@ class StudentTeacherTypeSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
 
     city = common_serializer.CitySerializer()
-    subject = common_serializer.SubjectSerializer()
+    subjects = StudentSubjectSerializer(many=True)
     level = common_serializer.LevelSerializer()
+    baselevel = common_serializer.BaseLevelSerializer()
     require = common_serializer.TeacherRequireSerializer()
     student_types = StudentTypeSerializer(many=True)
     teacher_types = StudentTeacherTypeSerializer(many=True)
@@ -65,6 +76,7 @@ class CreateStudentSerializer(serializers.ModelSerializer):
     """
         创建学生
     """
+    subjects = serializers.ListField(required=True)
     student_types = serializers.ListField(required=True)
     teacher_types = serializers.ListField(required=True)
     class Meta:
@@ -82,7 +94,8 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=False)
     phone = serializers.CharField(required=False)
     level = serializers.CharField(required=False)
-    subject = serializers.CharField(required=False)
+    baselevel = serializers.CharField(required=False)
+    subjects = serializers.ListField(required=False)
     address = serializers.CharField(required=False)
 
     class Meta:
