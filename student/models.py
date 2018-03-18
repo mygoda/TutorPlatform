@@ -23,14 +23,13 @@ class Student(common_models.CommonModel):
     phone = models.CharField(u"电话", max_length=16)
     level = models.ForeignKey(common_models.Level, verbose_name="年级")
     subject = models.ForeignKey(common_models.Subject, verbose_name="学科")
-    study = models.CharField(u"学习情况", max_length=32, null=True, blank=True)
     basis = models.ForeignKey(common_models.Basis, default=1, verbose_name="学生基础")
     times = models.CharField(u"补习次数", default="一周一次", max_length=64, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
 
     # 对老师的要求
-    require = models.CharField(u"教师资质", max_length=32, default="不限")
+    require = models.ForeignKey(common_models.TeacherRequire, default=1, verbose_name="教师资质")
     teacher_sex = models.IntegerField(u"教师性别", default=Sex.WOMEN, help_text="0：女 1：男")
 
     # 地址

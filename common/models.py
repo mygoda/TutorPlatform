@@ -162,3 +162,15 @@ class StudentType(CommonModel):
     class Meta:
         verbose_name = u'学生存在问题'
         verbose_name_plural = verbose_name
+
+
+class TeacherRequire(CommonModel):
+    """
+        教师资质，学生对教师的要求
+    """
+
+    name = models.CharField(u"教师资质", max_length=64)
+
+    class Meta:
+        verbose_name = u'教师资质'
+        verbose_name_plural = verbose_name

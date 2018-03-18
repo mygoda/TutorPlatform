@@ -40,6 +40,7 @@ router.register(r"learn", common_views.LearnViewset, base_name="learn_api")
 router.register(r"school", common_views.SchoolViewset, base_name="school_api")
 router.register(r"teacher_type", common_views.TeacherTypeViewset, base_name="teacher_type_api")
 router.register(r"student_type", common_views.StudentTypeViewset, base_name="student_type_api")
+router.register(r"require", common_views.TeacherRequireViewset, base_name="require_api")
 # customer api
 router.register(r"customer", customer_views.CustomerViewset, base_name="customer_api")
 # student api

@@ -98,3 +98,13 @@ class StudentTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StudentType
         fields = "__all__"
+
+
+class TeacherRequireSerializer(serializers.ModelSerializer):
+    """
+        教师特点 序列化
+    """
+
+    class Meta:
+        model = models.TeacherRequire
+        fields = "__all__"

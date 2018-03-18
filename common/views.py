@@ -174,3 +174,19 @@ class LearnViewset(viewsets.ModelViewSet):
         return common_serializers.LearnSerializer
 
 
+class TeacherRequireViewset(viewsets.ModelViewSet):
+    """
+        教师资质 api view
+    """
+
+    def get_queryset(self):
+        return common_models.TeacherRequire.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取 教师资质 序列化
+        :return:
+        """
+        return common_serializers.TeacherRequireSerializer
+
+
