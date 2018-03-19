@@ -13,3 +13,10 @@ class FOLLOWER_TYPE(object):
 
     TEACHER = 1
     STUDENT = 2
+
+
+# 申请者类型
+class APPLY_TYPE(object):
+
+    TEACHER = 1
+    STUDENT = 2

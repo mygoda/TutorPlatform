@@ -190,3 +190,74 @@ class TeacherRequireViewset(viewsets.ModelViewSet):
         return common_serializers.TeacherRequireSerializer
 
 
+class SubjectFilterViewset(viewsets.ModelViewSet):
+    """
+        科目搜索 api view
+    """
+
+    def get_queryset(self):
+        return common_models.Subject.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取 科目 序列化
+        :return:
+        """
+        return common_serializers.SubjectSerializer
+
+    def list(self, request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        subject_list = serializer.data
+        # 全部 学科搜索
+        first_dic = {
+            "id": "0",
+            "name": "全部课程",
+            "checked": False
+        }
+        subject_list.insert(0, first_dic)
+        return Response(subject_list)
+
+
+class SchoolFilterViewset(viewsets.ModelViewSet):
+    """
+        学校 搜索 api view
+    """
+
+    def get_queryset(self):
+        return common_models.School.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取 学校 序列化
+        :return:
+        """
+        return common_serializers.SchoolSerializer
+
+    def list(self, request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        subject_list = serializer.data
+        # 全部 学校 搜索
+        first_dic = {
+            "id": "0",
+            "city": "0",
+            "name": "全部学校",
+            "level": "全部学校"
+        }
+        subject_list.insert(0, first_dic)
+        return Response(subject_list)

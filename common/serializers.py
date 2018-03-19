@@ -21,7 +21,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Subject
-        fields = "__all__"
+        fields = ('id', 'name', 'checked')
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -87,7 +87,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.School
-        fields = "__all__"
+        fields = ('id', 'city', 'name', 'level')
 
 
 class TeacherTypeSerializer(serializers.ModelSerializer):
