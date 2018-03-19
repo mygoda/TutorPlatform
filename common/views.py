@@ -27,7 +27,7 @@ def upload_file(request):
     file_name = up_file.name
     key = "%s%s" % (uuid.create_uuid(), up_file.name)
     result = upload.upload_stream_to_qiniu(key=key, data=stream)
-    return JsonResponse({'url': result, "key": key, "size": size, "name": file_name})
+    return JsonResponse(data={'url': result, "key": key, "size": size, "name": file_name}, status=200)
 
 
 class CityViewset(viewsets.ModelViewSet):
