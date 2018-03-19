@@ -16,6 +16,7 @@ from rest_framework.renderers import BaseRenderer, JSONRenderer, CoreJSONRendere
 import traceback
 from . import exception
 from . import models
+from customer import models as customer_models
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,11 @@ class CommonMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.META.get("HTTP_CITYID"):
             request.city = models.City.objects.get(id=request.META.get("HTTP_CITYID"))
+
+        if request.META.get("HTTP_TOKEN"):
+            request.customer = customer_models.CustomerTokenShip.get_customer_by_token(request.META.get("HTTP_TOKEN"))
+        else:
+            request.customer = None
 
 
 class ProcessExceptionMiddleware(MiddlewareMixin):

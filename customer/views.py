@@ -5,6 +5,7 @@
 
 import logging
 
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
@@ -15,6 +16,15 @@ from . import serializers as customer_serializers
 
 logger = logging.getLogger(__name__)
 # Create your views here.
+
+
+def login(req):
+    code = req.GET.get("code")
+    print(req.META)
+    print("code %s" % code)
+    customer = customer_models.Customer.objects.all()[0]
+    token = customer_models.CustomerTokenShip.new_customer_token(customer_id=customer.id)
+    return JsonResponse(data={"token": token})
 
 
 class CustomerViewset(viewsets.ModelViewSet):
@@ -32,7 +42,7 @@ class CustomerViewset(viewsets.ModelViewSet):
         """
 
         return customer_serializers.CustomerSerializer
-    
+
     @list_route(methods=["POST"])
     def upload_file(self, request):
         files = request.FILES

@@ -146,3 +146,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'common.utils.CustomPagination',
     'PAGE_SIZE': 20,
 }
+
+# token expire time
+TOKEN_EXPIRE_TIME = 31536000    # one year
