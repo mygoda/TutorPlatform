@@ -83,7 +83,7 @@ class SchoolSerializer(serializers.ModelSerializer):
         学校 序列化
     """
 
-    city = CitySerializer()
+    # city = CitySerializer()
 
     class Meta:
         model = models.School
