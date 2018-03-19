@@ -6,10 +6,10 @@
 import logging
 
 from django.shortcuts import render
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import viewsets
-
+from libs import uuid, upload
 from . import models as customer_models
 from . import serializers as customer_serializers
 
@@ -32,3 +32,14 @@ class CustomerViewset(viewsets.ModelViewSet):
         """
 
         return customer_serializers.CustomerSerializer
+    
+    @list_route(methods=["POST"])
+    def upload_file(self, request):
+        files = request.FILES
+        up_file = files.get("file")
+        size = up_file.size / 1000
+        stream = up_file.read()
+        file_name = up_file.name
+        key = "%s%s" % (uuid.create_uuid(), up_file.name)
+        result = upload.upload_stream_to_qiniu(key=key, data=stream)
+        return Response({'url': result, "key": key, "size": size, "name": file_name})
