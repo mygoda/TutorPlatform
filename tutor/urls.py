@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^api/upload/', common_views.upload_file),
+    url(r'^api/login/', customer_views.login),
     url(r'^docs/', schema_view),
 
 ]
