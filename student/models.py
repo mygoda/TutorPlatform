@@ -8,7 +8,7 @@ from django.db import models
 
 from common import models as common_models
 from student import const
-from common.const import Sex, FOLLOWER_TYPE
+from common.const import Sex, FOLLOWER_TYPE, APPLY_TYPE
 from customer.models import Customer
 from libs import uuid
 
@@ -40,6 +40,14 @@ class Student(common_models.CommonModel):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def created_time(self):
+        return self.created_at.strftime('%Y-%m-%d')
+
+    @property
+    def updated_time(self):
+        return self.updated_at.strftime('%Y-%m-%d')
 
     @property
     def subjects(self):
@@ -202,3 +210,19 @@ class StudentFollowers(common_models.CommonModel):
         if self.is_valid:
             self.is_valid = False
             self.save()
+
+
+class StudentrApply(common_models.CommonModel):
+    """
+        老师 被申请列表
+        目前仅支持 学生向老师申请
+    """
+
+    student = models.ForeignKey(Student, help_text=u"学生")
+    customer = models.ForeignKey(Customer, null=True, help_text=u"申请者")
+    apply_type = models.IntegerField(u"申请者类型, 目前教师仅能被学生申请", default=APPLY_TYPE.TEACHER, help_text="1：老师 2：学生")
+    is_valid = models.BooleanField(u"是否有效", default=True)
+
+    class Meta:
+        verbose_name = u'老师被申请列表'
+        verbose_name_plural = verbose_name

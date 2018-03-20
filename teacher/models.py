@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.db import models
 from common import models as common_models
 from libs import uuid
-from common.const import Sex, FOLLOWER_TYPE
+from common.const import Sex, FOLLOWER_TYPE, APPLY_TYPE
 from .const import TEACHER_LEARN
 from customer.models import Customer
 # Create your models here.
@@ -54,9 +54,9 @@ class Teacher(common_models.CommonModel):
         :return:
         """
         customer = kwargs.get("customer")
-        if not customer:
-            customer = Customer.add()
-            kwargs["customer"] = customer
+        # if not customer:
+        #     customer = Customer.add()
+        #     kwargs["customer"] = customer
         if customer.customer_type:
             return False, '用户已注册过角色'
 
@@ -175,3 +175,19 @@ class TeacherFollowers(common_models.CommonModel):
         if self.is_valid:
             self.is_valid = False
             self.save()
+
+
+class TeacherApply(common_models.CommonModel):
+    """
+        老师 被申请列表
+        目前仅支持 学生向老师申请
+    """
+
+    teacher = models.ForeignKey(Teacher, help_text=u"教师")
+    customer = models.ForeignKey(Customer, null=True, help_text=u"申请者")
+    apply_type = models.IntegerField(u"申请者类型, 目前教师仅能被学生申请", default=APPLY_TYPE.STUDENT, help_text="1：老师 2：学生")
+    is_valid = models.BooleanField(u"是否有效", default=True)
+
+    class Meta:
+        verbose_name = u'老师被申请列表'
+        verbose_name_plural = verbose_name

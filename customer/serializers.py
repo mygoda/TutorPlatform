@@ -11,6 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     """
 
     user_favorites = serializers.ListField()
+    user_apply = serializers.ListField()
 
     class Meta:
         model = models.Customer

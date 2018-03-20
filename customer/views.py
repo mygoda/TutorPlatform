@@ -24,7 +24,12 @@ def login(req):
     print("code %s" % code)
     customer = customer_models.Customer.objects.all()[0]
     token = customer_models.CustomerTokenShip.new_customer_token(customer_id=customer.id)
-    return JsonResponse(data={"token": token})
+    print(token)
+    try:
+        return JsonResponse(data={"token": token})
+    except Exception as e:
+        import traceback
+        raise Exception(traceback.format_exc())
 
 
 class CustomerViewset(viewsets.ModelViewSet):
