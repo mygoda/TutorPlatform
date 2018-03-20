@@ -203,3 +203,32 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         teacher_follower.delete_teacher_follower()
         print('delete teacher follower %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})
+
+
+class TeacherApplyViewset(viewsets.ModelViewSet):
+    """
+        申请教师
+    """
+
+    def get_queryset(self):
+        return teacher_models.TeacherApply.objects.filter(is_valid=True)
+
+    def get_serializer_class(self):
+        """
+            获取序列化
+        :return:
+        """
+        if self.action == 'create':
+            return teacher_serializers.CreateTeacherApplySerializer
+        else:
+            return teacher_serializers.CreateTeacherApplySerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        pass

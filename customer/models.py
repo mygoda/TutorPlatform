@@ -48,6 +48,7 @@ class Customer(common_models.CommonModel):
                 student['id'] = follower.id
                 student['student_id'] = follower.student.id
                 student['student_name'] = follower.student.name
+                student['student_is_valid'] = follower.student.is_valid
                 student['student_subject'] = [{"name": subject.subject.name} for subject in follower.student.studentsubjectsship_set.all()]
                 student_followers.append(student)
             return student_followers
@@ -59,6 +60,7 @@ class Customer(common_models.CommonModel):
                 teacher['id'] = follower.id
                 teacher['teacher_id'] = follower.teacher.id
                 teacher['teacher_name'] = follower.teacher.last_name
+                teacher['teacher_is_valid'] = follower.teacher.is_valid
                 teacher['teacher_subject'] = [{"name": subject.subject.name} for subject in follower.teacher.teachersubjectsship_set.all()]
                 teacher_followers.append(teacher)
             return teacher_followers
@@ -81,6 +83,7 @@ class Customer(common_models.CommonModel):
                 student_apply['student_id'] = student.id
                 student_apply['student_name'] = student.name
                 student_apply['student_money'] = student.money
+                student_apply['student_is_valid'] = student.is_valid
                 student_apply['student_subject'] = [{"name": subject.subject.name} for subject in student.studentsubjectsship_set.all()]
                 self_apply.append(student_apply)
         elif self.customer_type == 2:
@@ -89,10 +92,10 @@ class Customer(common_models.CommonModel):
                 teacher = apply.customer.teacher_set.filter(is_valid=True).first()
                 teacher_apply = {}
                 teacher_apply['id'] = apply.id
-                teacher_apply['student_id'] = teacher.id
-                teacher_apply['student_name'] = teacher.name
-                teacher_apply['student_money'] = teacher.money
-                teacher_apply['student_subject'] = [{"name": subject.subject.name} for subject in teacher.studentsubjectsship_set.all()]
+                teacher_apply['teacher_id'] = teacher.id
+                teacher_apply['teacher_name'] = teacher.last_name
+                teacher_apply['teacher_money'] = teacher.money
+                teacher_apply['student_subject'] = [{"name": subject.subject.name} for subject in teacher.teachersubjectsship_set.all()]
                 self_apply.append(teacher_apply)
         return self_apply
 

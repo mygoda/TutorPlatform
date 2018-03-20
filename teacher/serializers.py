@@ -35,6 +35,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     subjects = TeacherSubjectSerializer(many=True)
     teacher_types = TeacherTypeSerializer(many=True)
     follower_count = serializers.IntegerField()
+    confirms = serializers.ListField(required=True)
 
     class Meta:
         model = models.Teacher
@@ -66,6 +67,7 @@ class CreateTeacherSerializer(serializers.ModelSerializer):
 
     subjects = serializers.ListField(required=True)
     teacher_types = serializers.ListField(required=True)
+    confirms = serializers.ListField(required=True)
 
     class Meta:
         model = models.Teacher
@@ -89,6 +91,7 @@ class UpdateTeacherSerializer(serializers.ModelSerializer):
         model = models.Teacher
         fields = "__all__"
 
+
 # 教师被收藏序列化
 
 class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
@@ -98,4 +101,16 @@ class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.TeacherFollowers
+        fields = '__all__'
+
+
+# 教师被申请序列化
+
+class CreateTeacherApplySerializer(serializers.ModelSerializer):
+    """
+        申请 教师
+    """
+
+    class Meta:
+        model = models.TeacherApply
         fields = '__all__'

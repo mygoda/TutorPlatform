@@ -37,6 +37,10 @@ class Teacher(common_models.CommonModel):
         return self.teachersubjectsship_set.all()
 
     @property
+    def confirms(self):
+        return [con.confirm for con in self.teacherconfirm_set.all()]
+
+    @property
     def teacher_types(self):
         return self.teachertypesship_set.all()
 
@@ -63,6 +67,7 @@ class Teacher(common_models.CommonModel):
         if not cls.objects.filter(phone=kwargs.get("phone"), is_valid=True).exists():
 
             subjects = kwargs.pop('subjects', [])
+            confirms = kwargs.pop('confirms', [])
             teacher_types = kwargs.pop('teacher_types', [])
 
             teacher = cls(**kwargs)
@@ -74,6 +79,14 @@ class Teacher(common_models.CommonModel):
                 subject["subject_id"] = int(id)
                 teacher_subject = TeacherSubjectsShip(**subject)
                 teacher_subject.save()
+
+            # 添加教师 证书
+            for id in confirms:
+                confirm = {}
+                confirm["teacher"] = teacher
+                confirm["confirm"] = id
+                teacher_confirm = TeacherConfirm(**confirm)
+                teacher_confirm.save()
 
             # 添加教师 教学特点
             for id in teacher_types:
@@ -127,6 +140,17 @@ class TeacherSubjectsShip(common_models.CommonModel):
 
     teacher = models.ForeignKey(Teacher, verbose_name=u"教师")
     subject = models.ForeignKey(common_models.Subject, verbose_name="学科", related_name="teacher_subject")
+
+    def __unicode__(self):
+        return "%s:%s" % (self.teacher.uid, self.subject.name)
+
+
+class TeacherConfirm(common_models.CommonModel):
+    """
+        教师证书
+    """
+    teacher = models.ForeignKey(Teacher, verbose_name=u"教师")
+    confirm = models.CharField(u"证书", max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return "%s:%s" % (self.teacher.uid, self.subject.name)
