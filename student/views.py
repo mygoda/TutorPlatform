@@ -71,9 +71,11 @@ class StudentViewset(viewsets.ModelViewSet):
             }             
         """    
         data = request.data
+        customer = request.customer
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        params['customer'] = customer
         # print('start create student info %s' % params)
         # 新增student
         status, msg = student_models.Student.add_student(**params)

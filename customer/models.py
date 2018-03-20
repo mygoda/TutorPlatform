@@ -30,6 +30,15 @@ class Customer(common_models.CommonModel):
         verbose_name_plural = verbose_name
 
     @property
+    def user_type(self):
+        if self.customer_type == 1:
+            return '教师'
+        elif self.customer_type == 2:
+            return '学生'
+        else:
+            return '未注册'
+
+    @property
     def user_favorites(self):
         if self.customer_type == 1:
             # 当用户为教师时，只显示收藏的学生

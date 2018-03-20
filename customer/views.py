@@ -58,3 +58,15 @@ class CustomerViewset(viewsets.ModelViewSet):
         key = "%s%s" % (uuid.create_uuid(), up_file.name)
         result = upload.upload_stream_to_qiniu(key=key, data=stream)
         return Response({'url': result, "key": key, "size": size, "name": file_name})
+
+    def retrieve(self, request, pk=None):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        customer = request.customer
+        serializer = customer_serializers.CustomerSerializer(customer)
+        return Response(serializer.data)

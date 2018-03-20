@@ -218,7 +218,7 @@ class SubjectFilterViewset(viewsets.ModelViewSet):
         subject_list = serializer.data
         # 全部 学科搜索
         first_dic = {
-            "id": "0",
+            "id": 0,
             "name": "全部课程",
             "checked": False
         }
@@ -254,8 +254,8 @@ class SchoolFilterViewset(viewsets.ModelViewSet):
         subject_list = serializer.data
         # 全部 学校 搜索
         first_dic = {
-            "id": "0",
-            "city": "0",
+            "id": 0,
+            "city": 0,
             "name": "全部学校",
             "level": "全部学校"
         }
