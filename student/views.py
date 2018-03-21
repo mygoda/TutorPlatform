@@ -149,7 +149,21 @@ class StudentViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def retrieve(self, request, pk=None):
+        """
 
+        :param request:
+        :param pk:
+        :return:
+        """
+        customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
+        student = student_models.Student.objects.get(id=pk)
+        serializer = student_serializers.StudentSerializer(student)
+        student_info = serializer.data
+        student_info['customer_is_follower'] = student.customer_is_follower(customer_id=customer.id)
+        return Response(student_info)
 
 
 class StudentFollowerViewset(viewsets.ModelViewSet):

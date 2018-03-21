@@ -51,6 +51,9 @@ class Teacher(common_models.CommonModel):
     def followers(self):
         return self.teacherfollowers_set.filter(is_valid=True).all()
 
+    def customer_is_follower(self, customer_id):
+        return self.teacherfollowers_set.filter(is_valid=True, customer_id=customer_id).exists()
+
     @classmethod
     def add_teacher(cls, **kwargs):
         """
@@ -179,10 +182,6 @@ class TeacherFollowers(common_models.CommonModel):
     class Meta:
         verbose_name = u'被收藏老师'
         verbose_name_plural = verbose_name
-
-    @classmethod
-    def customer_is_follower(cls, customer_id, teacher_id):
-        return cls.objects.filter(is_valid=True, teacher_id=teacher_id, customer_id=customer_id).exists()
 
 
     @classmethod

@@ -65,6 +65,9 @@ class Student(common_models.CommonModel):
     def follower_count(self):
         return self.studentfollowers_set.filter(is_valid=True).count()
 
+    def customer_is_follower(self, customer_id):
+        return self.studentfollowers_set.filter(is_valid=True, customer_id=customer_id).exists()
+
     @classmethod
     def add_student(cls, **kwargs):
         """
