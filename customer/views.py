@@ -97,5 +97,8 @@ class CustomerViewset(viewsets.ModelViewSet):
             student_data['customer_type_id'] = 2
             return Response(student_data)
         else:
-            return Response([])
+            user_data = {}
+            user_data['customer_type'] = '未注册'
+            user_data['customer_type_id'] = 0
+            return Response(user_data)
 
