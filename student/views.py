@@ -77,6 +77,8 @@ class StudentViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
         params['customer'] = customer
         # print('start create student info %s' % params)
         # 新增student
@@ -148,6 +150,8 @@ class StudentViewset(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+
+
 class StudentFollowerViewset(viewsets.ModelViewSet):
     """
         学生收藏api
@@ -187,6 +191,8 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
         params['customer'] = customer
         print('start add student followers info %s' % params)
         student_follower_id = student_models.StudentFollowers.add_student_follower(**params)

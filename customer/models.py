@@ -151,3 +151,34 @@ class CustomerTokenShip(common_models.CommonModel):
             return customer_tokens[0].customer
         else:
             return None
+
+
+class CustomerSuggestion(common_models.CommonModel):
+    """
+        用户反馈
+    """
+    OBJ = (
+        (0, '平台'),
+        (1, '教师'),
+        (2, '学生')
+    )
+    customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
+    reason = models.CharField(u"投诉原因", max_length=640, null=True, blank=True)
+    detailed = models.CharField(u"具体说明", max_length=640, null=True, blank=True)
+    suggestion_obj = models.IntegerField(u'投诉对象', choices=OBJ, default=0, help_text='0: 平台 1: 教师 2: 学生')
+    is_valid = models.BooleanField(u"是否处理", default=True)
+
+    class Meta:
+        verbose_name = u'投诉反馈'
+        verbose_name_plural = verbose_name
+
+    @classmethod
+    def add_suggestion(cls, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
+        suggestion = cls(**kwargs)
+        suggestion.save(force_insert=True)
+        return suggestion.id

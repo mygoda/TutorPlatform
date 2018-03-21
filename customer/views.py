@@ -10,6 +10,8 @@ from django.shortcuts import render
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import viewsets
+
+from common.exe import TokenException
 from libs import uuid, upload
 from . import models as customer_models
 from . import serializers as customer_serializers
@@ -102,3 +104,41 @@ class CustomerViewset(viewsets.ModelViewSet):
             user_data['customer_type_id'] = 0
             return Response(user_data)
 
+
+class CustomerSuggestionViewset(viewsets.ModelViewSet):
+    """
+        用户 api
+    """
+
+    def get_queryset(self):
+        return customer_models.CustomerSuggestion.objects.all()
+
+    def get_serializer_class(self):
+        """
+            获取序列化
+        :return:
+        """
+
+        return customer_serializers.CustomerSuggestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+            意见反馈，投诉
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        data = request.data
+        if not request.customer:
+            raise TokenException('用户验证失败')
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        params['customer'] = request.customer
+
+        suggestion_id = customer_models.CustomerSuggestion.add_suggestion(**params)
+        if suggestion_id:
+            return Response({'status': True, 'suggestion_id': suggestion_id})
+        print("add teacher follower error, is already exists. params")
+        return Response({'status': 0, 'msg': 'error'})

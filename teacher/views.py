@@ -78,6 +78,8 @@ class TeacherViewset(viewsets.ModelViewSet):
         # 序列化参数    
         data = request.data
         customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
@@ -191,6 +193,8 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
         params['customer'] = customer
         print('start add teacher followers info %s' % params)
         teacher_follower_id = teacher_models.TeacherFollowers.add_teacher_follower(**params)

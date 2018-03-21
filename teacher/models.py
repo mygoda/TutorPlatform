@@ -181,6 +181,11 @@ class TeacherFollowers(common_models.CommonModel):
         verbose_name_plural = verbose_name
 
     @classmethod
+    def customer_is_follower(cls, customer_id, teacher_id):
+        return cls.objects.filter(is_valid=True, teacher_id=teacher_id, customer_id=customer_id).exists()
+
+
+    @classmethod
     def add_teacher_follower(cls, **kwargs):
         """
             点击收藏 教师

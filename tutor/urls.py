@@ -45,6 +45,7 @@ router.register(r"subfilter", common_views.SubjectFilterViewset, base_name="subf
 router.register(r"schfilter", common_views.SchoolFilterViewset, base_name="schfilter_api")
 # customer api
 router.register(r"customer", customer_views.CustomerViewset, base_name="customer_api")
+router.register(r"suggestion", customer_views.CustomerSuggestionViewset, base_name="suggestion_api")
 # student api
 router.register(r"students", student_views.StudentViewset, base_name="student_api")
 router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")

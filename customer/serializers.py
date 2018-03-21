@@ -19,3 +19,11 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ('user_type', 'uuid', 'nickname', 'avatar_url', 'user_favorites', 'user_apply')
 
 
+class CustomerSuggestionSerializer(serializers.ModelSerializer):
+    """
+        投诉序列化
+    """
+
+    class Meta:
+        model = models.CustomerSuggestion
+        fields = '__all__'
