@@ -28,7 +28,7 @@ class TeacherTypeSerializer(serializers.ModelSerializer):
         fields = ("id", "teacher_type")
 
 
-class TeacherSerializer(serializers.ModelSerializer):
+class TeacherSerializer(common_serializer.CommonSerializer):
 
     city = common_serializer.CitySerializer()
     school = common_serializer.SchoolSerializer()

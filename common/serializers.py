@@ -4,6 +4,14 @@ from rest_framework import serializers
 from . import models
 
 
+class CommonSerializer(serializers.ModelSerializer):
+
+    create_time = serializers.CharField()
+
+    class Meta:
+        model = models.CommonModel
+        fields = "__all__"
+
 class CitySerializer(serializers.ModelSerializer):
     """
         城市 序列化

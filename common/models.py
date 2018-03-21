@@ -38,6 +38,10 @@ class CommonModel(models.Model):
         """
         return self.__class__.__name__.lower()
 
+    @property
+    def create_time(self):
+        return self.created_at.strftime("%Y-%m-%d")
+
 
 class City(CommonModel):
     """城市"""
