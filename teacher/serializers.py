@@ -101,7 +101,7 @@ class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.TeacherFollowers
-        fields = '__all__'
+        fields = ('teacher', 'created_at', 'updated_at')
 
 
 # 教师被申请序列化

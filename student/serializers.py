@@ -115,4 +115,4 @@ class CreateStudentFollowerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.StudentFollowers
-        fields = '__all__'
+        fields = ('student', 'created_at', 'updated_at')

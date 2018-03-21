@@ -8,6 +8,8 @@ import logging
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets
+
+from common.exe import TokenException
 from . import serializers as teacher_serializers
 from . import models as teacher_models
 
@@ -96,6 +98,8 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:           
         """
         data = request.data
+        if request.customer.teacher_set.filter(is_valid=True).first().id != pk:
+            raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
@@ -111,6 +115,8 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:            
         """
         print('start delete teacher %s' % pk)
+        if request.customer.teacher_set.filter(is_valid=True).first().id != pk:
+            raise TokenException('用户验证失败')
         teacher = teacher_models.Teacher.objects.get(id=pk)
         teacher.delete_teacher()
         print('delete teacher %s success' % pk)
@@ -184,6 +190,8 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        customer = request.customer
+        params['customer'] = customer
         print('start add teacher followers info %s' % params)
         teacher_follower_id = teacher_models.TeacherFollowers.add_teacher_follower(**params)
         if teacher_follower_id:
@@ -200,6 +208,8 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         """
         print('start delete teacher follower %s' % pk)
         teacher_follower = teacher_models.TeacherFollowers.objects.get(id=pk)
+        if request.customer != teacher_follower.customer:
+            raise TokenException('用户验证失败')
         teacher_follower.delete_teacher_follower()
         print('delete teacher follower %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})

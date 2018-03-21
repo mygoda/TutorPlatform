@@ -3,6 +3,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets
+
+from common.exe import TokenException
 from . import serializers as student_serializers
 from . import models as student_models
 # Create your views here.
@@ -71,10 +73,10 @@ class StudentViewset(viewsets.ModelViewSet):
             }             
         """    
         data = request.data
-        customer = request.customer
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        customer = request.customer
         params['customer'] = customer
         # print('start create student info %s' % params)
         # 新增student
@@ -93,6 +95,8 @@ class StudentViewset(viewsets.ModelViewSet):
         :return:       
         """
         print('start delete student %s' % pk)
+        if request.customer.student_set.filter(is_valid=True).first().id != pk:
+            raise TokenException('用户验证失败')
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
         print('delete student %s success' % pk)
@@ -107,6 +111,8 @@ class StudentViewset(viewsets.ModelViewSet):
         :return:
         """
         data = request.data
+        if request.customer.student_set.filter(is_valid=True).first().id != pk:
+            raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
@@ -180,6 +186,8 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        customer = request.customer
+        params['customer'] = customer
         print('start add student followers info %s' % params)
         student_follower_id = student_models.StudentFollowers.add_student_follower(**params)
         if student_follower_id:
@@ -196,6 +204,8 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         """
         print('start delete student follower %s' % pk)
         student_follower = student_models.StudentFollowers.objects.get(id=pk)
+        if request.customer != student_follower.customer:
+            raise TokenException('用户验证失败')
         student_follower.delete_student_follower()
         print('delete student follower %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})
