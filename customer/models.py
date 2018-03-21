@@ -172,6 +172,10 @@ class CustomerSuggestion(common_models.CommonModel):
         verbose_name = u'投诉反馈'
         verbose_name_plural = verbose_name
 
+    @property
+    def images(self):
+        return [image.image for image in self.suggestionimage_set.all()]
+
     @classmethod
     def add_suggestion(cls, **kwargs):
         """
@@ -179,6 +183,27 @@ class CustomerSuggestion(common_models.CommonModel):
         :param kwargs:
         :return:
         """
+        images = kwargs.pop('images', [])
         suggestion = cls(**kwargs)
         suggestion.save(force_insert=True)
+        # 添加教师 证书
+        for img in images:
+            image = {}
+            image["suggestion"] = suggestion
+            image["image"] = img
+            suggestion_image = SuggestionImage(**image)
+            suggestion_image.save()
+
         return suggestion.id
+
+
+class SuggestionImage(common_models.CommonModel):
+    """
+        投诉image
+    """
+    suggestion = models.ForeignKey(CustomerSuggestion, verbose_name=u"投诉表")
+    image = models.CharField(u"图片", max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = u'投诉图片'
+        verbose_name_plural = verbose_name

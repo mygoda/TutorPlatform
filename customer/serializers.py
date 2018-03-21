@@ -24,6 +24,8 @@ class CustomerSuggestionSerializer(serializers.ModelSerializer):
         投诉序列化
     """
 
+    images = serializers.ListField()
+
     class Meta:
         model = models.CustomerSuggestion
         fields = '__all__'

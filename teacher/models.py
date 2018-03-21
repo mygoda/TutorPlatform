@@ -156,7 +156,7 @@ class TeacherConfirm(common_models.CommonModel):
     confirm = models.CharField(u"证书", max_length=255, null=True, blank=True)
 
     def __unicode__(self):
-        return "%s:%s" % (self.teacher.uid, self.subject.name)
+        return "%s" % (self.teacher.uid, )
 
 
 class TeacherTypesShip(common_models.CommonModel):
