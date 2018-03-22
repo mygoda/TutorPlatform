@@ -178,3 +178,14 @@ class TeacherRequire(CommonModel):
     class Meta:
         verbose_name = u'教师资质'
         verbose_name_plural = verbose_name
+
+
+class Reason(CommonModel):
+    """
+        原因
+    """
+    name = models.CharField(u"原因", max_length=64)
+
+    class Meta:
+        verbose_name = u'原因'
+        verbose_name_plural = verbose_name

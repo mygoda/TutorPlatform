@@ -25,6 +25,7 @@ class CustomerSuggestionSerializer(serializers.ModelSerializer):
     """
 
     images = serializers.ListField()
+    reasons = serializers.ListField()
 
     class Meta:
         model = models.CustomerSuggestion

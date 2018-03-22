@@ -176,6 +176,10 @@ class CustomerSuggestion(common_models.CommonModel):
     def images(self):
         return [image.image for image in self.suggestionimage_set.all()]
 
+    @property
+    def reasons(self):
+        return [reason.reason for reason in self.suggestionreason_set.all()]
+
     @classmethod
     def add_suggestion(cls, **kwargs):
         """
@@ -184,15 +188,24 @@ class CustomerSuggestion(common_models.CommonModel):
         :return:
         """
         images = kwargs.pop('images', [])
+        reasons = kwargs.pop('reasons', [])
         suggestion = cls(**kwargs)
         suggestion.save(force_insert=True)
-        # 添加教师 证书
+        # 添加 图片
         for img in images:
             image = {}
             image["suggestion"] = suggestion
             image["image"] = img
             suggestion_image = SuggestionImage(**image)
             suggestion_image.save()
+
+        # 添加 原因
+        for id in reasons:
+            reason = {}
+            reason["suggestion"] = suggestion
+            reason["reason"] = id
+            suggestion_reason = SuggestionReason(**reason)
+            suggestion_reason.save()
 
         return suggestion.id
 
@@ -206,4 +219,16 @@ class SuggestionImage(common_models.CommonModel):
 
     class Meta:
         verbose_name = u'投诉图片'
+        verbose_name_plural = verbose_name
+
+
+class SuggestionReason(common_models.CommonModel):
+    """
+        投诉 原因
+    """
+    suggestion = models.ForeignKey(CustomerSuggestion, verbose_name=u"投诉表")
+    reason = models.ForeignKey(common_models.Reason, verbose_name=u"投诉原因")
+
+    class Meta:
+        verbose_name = u'投诉原因'
         verbose_name_plural = verbose_name
