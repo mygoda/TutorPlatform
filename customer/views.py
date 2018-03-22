@@ -139,6 +139,6 @@ class CustomerSuggestionViewset(viewsets.ModelViewSet):
 
         suggestion_id = customer_models.CustomerSuggestion.add_suggestion(**params)
         if suggestion_id:
-            return Response({'status': True, 'suggestion_id': suggestion_id})
+            return Response({'status': 1, 'suggestion_id': suggestion_id})
         print("add teacher follower error, is already exists. params")
         return Response({'status': 0, 'msg': 'error'})

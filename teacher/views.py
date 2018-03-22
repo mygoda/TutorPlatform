@@ -216,7 +216,7 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         print('start add teacher followers info %s' % params)
         teacher_follower_id = teacher_models.TeacherFollowers.add_teacher_follower(**params)
         if teacher_follower_id:
-            return Response({'status': True, 'teacher_follower_id': teacher_follower_id})
+            return Response({'status': 1, 'teacher_follower_id': teacher_follower_id})
         print("add teacher follower error, is already exists. params: %s" % params)
         return Response({'status': 0, 'msg': '收藏失败'})
 
