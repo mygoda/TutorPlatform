@@ -201,7 +201,7 @@ class CustomerSuggestion(common_models.CommonModel):
         for id in reasons:
             reason = {}
             reason["suggestion"] = suggestion
-            reason["reason"] = id
+            reason["reason_id"] = id
             suggestion_reason = SuggestionReason(**reason)
             suggestion_reason.save()
 
