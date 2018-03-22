@@ -126,3 +126,13 @@ class TeacherRequireSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TeacherRequire
         fields = "__all__"
+
+
+class ReasonSerializer(serializers.ModelSerializer):
+    """
+        原因 序列化
+    """
+
+    class Meta:
+        model = models.TeacherRequire
+        fields = "__all__"

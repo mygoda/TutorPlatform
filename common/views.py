@@ -261,3 +261,19 @@ class SchoolFilterViewset(viewsets.ModelViewSet):
         }
         subject_list.insert(0, first_dic)
         return Response(subject_list)
+
+
+class ReasonViewset(viewsets.ModelViewSet):
+    """
+        原因 api view
+    """
+
+    def get_queryset(self):
+        return common_models.Reason.objects.all()
+
+    def get_serializer_class(self):
+        """
+            原因 学生基础 序列化
+        :return:
+        """
+        return common_serializers.ReasonSerializer
