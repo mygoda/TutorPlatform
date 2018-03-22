@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 
 from django.db import models
+
+from common.const import OBJ_TYPE
 from libs.uuid import create_uuid
 # Create your models here.
 import time
@@ -157,15 +159,11 @@ class CustomerSuggestion(common_models.CommonModel):
     """
         用户反馈
     """
-    OBJ = (
-        (0, '平台'),
-        (1, '教师'),
-        (2, '学生')
-    )
+
     customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
     reason = models.CharField(u"投诉原因", max_length=640, null=True, blank=True)
     detailed = models.CharField(u"具体说明", max_length=640, null=True, blank=True)
-    suggestion_obj = models.IntegerField(u'投诉对象', choices=OBJ, default=0, help_text='0: 平台 1: 教师 2: 学生')
+    suggestion_obj = models.IntegerField(u'投诉对象', default=OBJ_TYPE.OUR, help_text='0: 平台 1: 教师 2: 学生')
     is_valid = models.BooleanField(u"是否处理", default=True)
 
     class Meta:

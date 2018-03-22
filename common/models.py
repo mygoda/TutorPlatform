@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 # Create your models here.
+from common.const import OBJ_TYPE
 
 
 class CommonModel(models.Model):
@@ -185,6 +186,7 @@ class Reason(CommonModel):
         原因
     """
     name = models.CharField(u"原因", max_length=64)
+    type = models.IntegerField(u'投诉对象', default=OBJ_TYPE.OUR, help_text='0: 平台 1: 教师 2: 学生')
 
     class Meta:
         verbose_name = u'原因'

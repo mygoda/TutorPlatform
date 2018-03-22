@@ -20,3 +20,11 @@ class APPLY_TYPE(object):
 
     TEACHER = 1
     STUDENT = 2
+
+class OBJ_TYPE(object):
+    """
+
+    """
+    OUR = 0
+    TEACHER = 1
+    STUDENT = 2

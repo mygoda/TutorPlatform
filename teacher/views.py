@@ -117,7 +117,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:            
         """
         print('start delete teacher %s' % pk)
-        if request.customer.teacher_set.filter(is_valid=True).first().id != pk:
+        if request.customer.teacher_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         teacher = teacher_models.Teacher.objects.get(id=pk)
         teacher.delete_teacher()
