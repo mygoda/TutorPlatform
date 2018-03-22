@@ -277,3 +277,23 @@ class ReasonViewset(viewsets.ModelViewSet):
         :return:
         """
         return common_serializers.ReasonSerializer
+
+    def list(self, request, *args, **kwargs):
+        """
+            获取教师list
+            支持分页，默认每页20条
+            当has_next 为 false 时，表示没有下一页了
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # 获取  queryset
+        queryset = self.get_queryset()
+        # 实现filter
+        data = request.GET
+        if data.get('type', 0):
+            queryset = queryset.filter(type=data.get('type'))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

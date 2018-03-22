@@ -134,5 +134,5 @@ class ReasonSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = models.TeacherRequire
+        model = models.Reason
         fields = "__all__"
