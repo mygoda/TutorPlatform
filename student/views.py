@@ -97,7 +97,7 @@ class StudentViewset(viewsets.ModelViewSet):
         :return:       
         """
         print('start delete student %s' % pk)
-        if request.customer.student_set.filter(is_valid=True).first().id != pk:
+        if request.customer.student_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
@@ -113,7 +113,7 @@ class StudentViewset(viewsets.ModelViewSet):
         :return:
         """
         data = request.data
-        if request.customer.student_set.filter(is_valid=True).first().id != pk:
+        if request.customer.student_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)

@@ -100,7 +100,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:           
         """
         data = request.data
-        if request.customer.teacher_set.filter(is_valid=True).first().id != pk:
+        if request.customer.teacher_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
