@@ -84,12 +84,14 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         params['customer'] = customer
-        # print('start create teacher info %s' % params)
+        logger.info('start create teacher info %s' % params)
+
+        # 添加教师
         status, msg = teacher_models.Teacher.add_teacher(**params)
         if status:
             print('add teacher %s success' % msg)
             return Response({'status': 1, 'teacher_id': msg})
-        # print('add teacher %s error msg %s' % (params, msg))
+        logger.info('add teacher %s error msg %s' % (params, msg))
         return Response({'status': 0, 'msg': msg})
 
     def update(self, request, pk=None):

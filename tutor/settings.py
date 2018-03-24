@@ -121,6 +121,88 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+
+LOG_DIR = os.environ.get("LOG_DIR", "logs")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'default': {
+            'level': 'DEBUG',
+            'class': 'utils.log_kit.MyLoggerHandler',
+            'filename': os.path.join(LOG_DIR, 'debug.log'),
+            'when': 'D', # 1day
+            'backupCount': 365,
+            'formatter': 'verbose',
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(pathname)s %(lineno)s %(funcName)s %(message)s'
+        },
+        'short': {
+            'format': '%(asctime)s %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['default', 'sentry'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['default', 'sentry'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'common': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'customer': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'libs': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'student': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'teacher': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    }
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
