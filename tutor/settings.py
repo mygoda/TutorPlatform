@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for tutor project.
 
@@ -11,6 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -154,6 +156,7 @@ LOGGING = {
             'when': 'D', # 1day
             'backupCount': 365,
             'formatter': 'verbose',
+            'encoding': 'UTF-8'
         }
     },
     'formatters': {
