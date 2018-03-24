@@ -108,6 +108,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        logger.info('update teacher params %s' % params)
         update_teacher = teacher_models.Teacher.objects.get(id=pk)
         update_teacher.update_teacher(**params)
         return Response({'status': 1, 'teacher_id': pk})
@@ -119,12 +120,12 @@ class TeacherViewset(viewsets.ModelViewSet):
         :param pk: 教师id         
         :return:            
         """
-        print('start delete teacher %s' % pk)
+        logger.info('start delete teacher %s' % pk)
         if request.customer.teacher_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         teacher = teacher_models.Teacher.objects.get(id=pk)
         teacher.delete_teacher()
-        print('delete teacher %s success' % pk)
+        logger.info('delete teacher %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})
 
     def list(self, request, *args, **kwargs):
@@ -215,11 +216,11 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         if not customer:
             raise TokenException('用户验证失败')
         params['customer'] = customer
-        print('start add teacher followers info %s' % params)
+        logger.info('start add teacher followers info %s' % params)
         teacher_follower_id, msg = teacher_models.TeacherFollowers.add_teacher_follower(**params)
         if teacher_follower_id:
             return Response({'status': 1, 'teacher_follower_id': teacher_follower_id})
-        print("add teacher follower error, is already exists. params: %s" % params)
+        logger.info("add teacher follower error, is already exists. params: %s" % params)
         return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
@@ -229,12 +230,12 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
         :param pk: 收藏id
         :return:
         """
-        print('start delete teacher follower %s' % pk)
+        logger.info('start delete teacher follower %s' % pk)
         teacher_follower = teacher_models.TeacherFollowers.objects.get(id=pk)
         if request.customer != teacher_follower.customer:
             raise TokenException('用户验证失败')
         teacher_follower.delete_teacher_follower()
-        print('delete teacher follower %s success' % pk)
+        logger.info('delete teacher follower %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})
 
 

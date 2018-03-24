@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets
@@ -7,6 +9,9 @@ from rest_framework import viewsets
 from common.exe import TokenException
 from . import serializers as student_serializers
 from . import models as student_models
+
+logger = logging.getLogger(__name__)
+
 # Create your views here.
 
 
@@ -80,13 +85,13 @@ class StudentViewset(viewsets.ModelViewSet):
         if not customer:
             raise TokenException('用户验证失败')
         params['customer'] = customer
-        # print('start create student info %s' % params)
+        logger.info('start create student info %s' % params)
         # 新增student
         status, msg = student_models.Student.add_student(**params)
         if status:
             print('add student %s success' % msg)
             return Response({'status': 1, 'student_id': msg})
-        # print('add student %s error msg %s' % (params, msg))
+        logger.info('add student %s error msg %s' % (params, msg))
         return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
@@ -96,12 +101,12 @@ class StudentViewset(viewsets.ModelViewSet):
         :param pk: 学生id      
         :return:       
         """
-        print('start delete student %s' % pk)
+        logger.info('start delete student %s' % pk)
         if request.customer.student_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         student = student_models.Student.objects.get(id=pk)
         student.delete_student()
-        print('delete student %s success' % pk)
+        logger.info('delete student %s success' % pk)
         return Response({'status': 1, 'student_id': pk})
 
     def update(self, request, pk=None):
@@ -118,6 +123,7 @@ class StudentViewset(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
+        logger.info('update student params %s' % params)
         update_student = student_models.Student.objects.get(id=pk)
         update_student.update_student(**params)
         return Response({'status': 1, 'student_id': pk})
@@ -208,11 +214,11 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         if not customer:
             raise TokenException('用户验证失败')
         params['customer'] = customer
-        print('start add student followers info %s' % params)
+        logger.info('start add student followers info %s' % params)
         student_follower_id, msg = student_models.StudentFollowers.add_student_follower(**params)
         if student_follower_id:
             return Response({'status': 1, 'student_follower_id': student_follower_id})
-        print("add student follower error, is already exists. params: %s" % params)
+        logger.info("add student follower error, is already exists. params: %s" % params)
         return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
@@ -222,11 +228,11 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
         :param pk: 收藏id
         :return:
         """
-        print('start delete student follower %s' % pk)
+        logger.info('start delete student follower %s' % pk)
         student_follower = student_models.StudentFollowers.objects.get(id=pk)
         if request.customer != student_follower.customer:
             raise TokenException('用户验证失败')
         student_follower.delete_student_follower()
-        print('delete student follower %s success' % pk)
+        logger.info('delete student follower %s success' % pk)
         return Response({'status': 1, 'teacher_id': pk})
 

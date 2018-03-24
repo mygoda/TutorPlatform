@@ -87,22 +87,19 @@ class CustomerViewset(viewsets.ModelViewSet):
         if customer.customer_type == 1:
             teacher = customer.teacher_set.filter(is_valid=True).first()
             serializer = teacher_serializers.TeacherSerializer(teacher)
-            teacher_data = serializer.data
-            teacher_data['customer_type'] = '教师'
-            teacher_data['customer_type_id'] = 1
-            return Response(teacher_data)
         elif customer.customer_type == 2:
             student = customer.student_set.filter(is_valid=True).first()
             serializer = student_serializers.StudentSerializer(student)
-            student_data = serializer.data
-            student_data['customer_type'] = '学生'
-            student_data['customer_type_id'] = 2
-            return Response(student_data)
         else:
             user_data = {}
             user_data['customer_type'] = '未注册'
             user_data['customer_type_id'] = 0
             return Response(user_data)
+
+        user_data = serializer.data
+        user_data['customer_type'] = '教师'
+        user_data['customer_type_id'] = 1
+        return Response(user_data)
 
 
 class CustomerSuggestionViewset(viewsets.ModelViewSet):
@@ -136,9 +133,9 @@ class CustomerSuggestionViewset(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         params = serializer.validated_data
         params['customer'] = request.customer
-
+        logger.info("create suggestion_id params %s" % params)
         suggestion_id = customer_models.CustomerSuggestion.add_suggestion(**params)
         if suggestion_id:
             return Response({'status': 1, 'suggestion_id': suggestion_id})
-        print("add teacher follower error, is already exists. params")
-        return Response({'status': 0, 'msg': 'error'})
+        logger.info("add suggestion error, is already exists. params")
+        return Response({'status': 0, 'msg': '投诉异常'})
