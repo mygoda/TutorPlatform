@@ -161,7 +161,6 @@ class CustomerSuggestion(common_models.CommonModel):
     """
 
     customer = models.ForeignKey(Customer, verbose_name="用户", null=True, blank=True)
-    reason = models.CharField(u"投诉原因", max_length=640, null=True, blank=True)
     detailed = models.CharField(u"具体说明", max_length=640, null=True, blank=True)
     suggestion_obj = models.IntegerField(u'投诉对象', default=OBJ_TYPE.OUR, help_text='0: 平台 1: 教师 2: 学生')
     is_valid = models.BooleanField(u"是否处理", default=True)

@@ -102,6 +102,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         :return:           
         """
         data = request.data
+        # 验证用户
         if request.customer.teacher_set.filter(is_valid=True).first().id != int(pk):
             raise TokenException('用户验证失败')
         serializer = self.get_serializer(data=data)
@@ -215,11 +216,11 @@ class TeacherFollowerViewset(viewsets.ModelViewSet):
             raise TokenException('用户验证失败')
         params['customer'] = customer
         print('start add teacher followers info %s' % params)
-        teacher_follower_id = teacher_models.TeacherFollowers.add_teacher_follower(**params)
+        teacher_follower_id, msg = teacher_models.TeacherFollowers.add_teacher_follower(**params)
         if teacher_follower_id:
             return Response({'status': 1, 'teacher_follower_id': teacher_follower_id})
         print("add teacher follower error, is already exists. params: %s" % params)
-        return Response({'status': 0, 'msg': '收藏失败'})
+        return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
         """

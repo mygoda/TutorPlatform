@@ -190,15 +190,19 @@ class TeacherFollowers(common_models.CommonModel):
             点击收藏 教师
         :return:
         """
+        msg = ''
         teacher = kwargs.get("teacher")
         customer = kwargs.get("customer")
         # 教师不能收藏教师
         if customer.customer_type == 1:
-            return False
+            msg = '教师不能收藏教师'
+            return False, msg
         if not cls.objects.filter(is_valid=True, teacher=teacher, customer=customer).exists():
             student_follower = cls(**kwargs)
             student_follower.save(force_insert=True)
-            return student_follower.id
+            return student_follower.id, msg
+        msg = '不能重复收藏'
+        return False, msg
 
     def delete_teacher_follower(self):
         """
