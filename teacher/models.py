@@ -190,7 +190,12 @@ class TeacherFollowers(common_models.CommonModel):
             点击收藏 教师
         :return:
         """
-        if not cls.objects.filter(is_valid=True, teacher=kwargs.get("teacher"), customer=kwargs.get("customer")).exists():
+        teacher = kwargs.get("teacher")
+        customer = kwargs.get("customer")
+        # 教师不能收藏教师
+        if customer.customer_type == 1:
+            return False
+        if not cls.objects.filter(is_valid=True, teacher=teacher, customer=customer).exists():
             student_follower = cls(**kwargs)
             student_follower.save(force_insert=True)
             return student_follower.id
