@@ -209,11 +209,11 @@ class StudentFollowerViewset(viewsets.ModelViewSet):
             raise TokenException('用户验证失败')
         params['customer'] = customer
         print('start add student followers info %s' % params)
-        student_follower_id = student_models.StudentFollowers.add_student_follower(**params)
+        student_follower_id, msg = student_models.StudentFollowers.add_student_follower(**params)
         if student_follower_id:
             return Response({'status': 1, 'student_follower_id': student_follower_id})
         print("add student follower error, is already exists. params: %s" % params)
-        return Response({'status': 0, 'msg': '收藏失败'})
+        return Response({'status': 0, 'msg': msg})
 
     def destroy(self, request, pk=None):
         """
