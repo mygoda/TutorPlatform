@@ -194,8 +194,8 @@ class TeacherFollowers(common_models.CommonModel):
         teacher = kwargs.get("teacher")
         customer = kwargs.get("customer")
         # 教师不能收藏教师
-        if customer.customer_type == 1:
-            msg = '教师不能收藏教师'
+        if customer.customer_type != 2:
+            msg = '仅学生才能收藏教师'
             return False, msg
         if not cls.objects.filter(is_valid=True, teacher=teacher, customer=customer).exists():
             student_follower = cls(**kwargs)
