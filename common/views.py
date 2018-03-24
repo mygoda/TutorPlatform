@@ -297,3 +297,18 @@ class ReasonViewset(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class UseHelpViewset(viewsets.ModelViewSet):
+    """
+        使用帮助 api
+    """
+    def get_queryset(self):
+        return common_models.UseHelp.objects.filter(is_valid=True)
+
+    def get_serializer_class(self):
+        """
+             使用帮助 序列化
+        :return:
+        """
+        return common_serializers.UseHelpSerializer

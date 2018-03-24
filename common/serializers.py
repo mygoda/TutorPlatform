@@ -136,3 +136,13 @@ class ReasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reason
         fields = "__all__"
+
+
+class UseHelpSerializer(serializers.ModelSerializer):
+    """
+        使用帮助 序列化
+    """
+
+    class Meta:
+        model = models.UseHelp
+        fields = "__all__"

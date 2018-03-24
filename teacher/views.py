@@ -171,7 +171,6 @@ class TeacherViewset(viewsets.ModelViewSet):
         return Response(teacher_info)
 
 
-
 class TeacherFollowerViewset(viewsets.ModelViewSet):
     """
         教师收藏api
