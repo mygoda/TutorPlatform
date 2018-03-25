@@ -58,7 +58,10 @@ class CustomerFavoriteViewset(viewsets.ModelViewSet):
             获取用户收藏列表
         :param request:
         :param args:
-        :param kwargs:
+        :param kwargs:{
+	        "target_id": 6,
+	        "target_type": "student"
+        }
         :return:
         """
         customer = request.customer
