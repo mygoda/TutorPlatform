@@ -175,94 +175,97 @@ class TeacherViewset(viewsets.ModelViewSet):
         return Response(teacher_info)
 
 
-class TeacherFollowerViewset(viewsets.ModelViewSet):
-    """
-        教师收藏api
-    """
-
-    def get_queryset(self):
-        return teacher_models.TeacherFollowers.objects.filter(is_valid=True)
-
-    def get_serializer_class(self):
-        """
-            获取序列化
-        :return:
-        """
-        if self.action == 'create':
-            return teacher_serializers.CreateTeacherFollowerSerializer
-        else:
-            return teacher_serializers.CreateTeacherFollowerSerializer
-
-    def create(self, request, *args, **kwargs):
-        """
-            点击收藏  教师          
-        :param request:           
-        :param args:           
-        :param kwargs:{                 
-              "teacher": ",             被收藏教师id          
-              "customer": 1             操作的用户id          
-            }           
-        :return: {              
-            'status': 0/1,              返回状态  目前0失败，1成功            
-            'teacher_follower_id': 1    收藏id,             
-            'msg': '收藏失败'            失败时信息            
-        }              
-        """
-        data = request.data
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        params = serializer.validated_data
-        customer = request.customer
-        if not customer:
-            raise TokenException('用户验证失败')
-        params['customer'] = customer
-        logger.info('start add teacher followers info %s' % params)
-        teacher_follower_id, msg = teacher_models.TeacherFollowers.add_teacher_follower(**params)
-        if teacher_follower_id:
-            return Response({'status': 1, 'teacher_follower_id': teacher_follower_id})
-        logger.info("add teacher follower error, is already exists. params: %s" % params)
-        return Response({'status': 0, 'msg': msg})
-
-    def destroy(self, request, pk=None):
-        """
-            删除 教师 的收藏
-        :param request:
-        :param pk: 收藏id
-        :return:
-        """
-        logger.info('start delete teacher follower %s' % pk)
-        teacher_follower = teacher_models.TeacherFollowers.objects.get(id=pk)
-        if request.customer != teacher_follower.customer:
-            raise TokenException('用户验证失败')
-        teacher_follower.delete_teacher_follower()
-        logger.info('delete teacher follower %s success' % pk)
-        return Response({'status': 1, 'teacher_id': pk})
-
-
-class TeacherApplyViewset(viewsets.ModelViewSet):
-    """
-        申请教师
-    """
-
-    def get_queryset(self):
-        return teacher_models.TeacherApply.objects.filter(is_valid=True)
-
-    def get_serializer_class(self):
-        """
-            获取序列化
-        :return:
-        """
-        if self.action == 'create':
-            return teacher_serializers.CreateTeacherApplySerializer
-        else:
-            return teacher_serializers.CreateTeacherApplySerializer
-
-    def create(self, request, *args, **kwargs):
-        """
-
-        :param request:
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        pass
+# class TeacherFollowerViewset(viewsets.ModelViewSet):
+#     """
+#         教师收藏api
+#     """
+#
+#     def get_queryset(self):
+#         return teacher_models.TeacherFollowers.objects.filter(is_valid=True)
+#
+#     def get_serializer_class(self):
+#         """
+#             获取序列化
+#         :return:
+#         """
+#         if self.action == 'create':
+#             return teacher_serializers.CreateTeacherFollowerSerializer
+#         else:
+#             return teacher_serializers.CreateTeacherFollowerSerializer
+#
+#     def create(self, request, *args, **kwargs):
+#         """
+#             点击收藏  教师
+#         :param request:
+#         :param args:
+#         :param kwargs:{
+#               "teacher": ",             被收藏教师id
+#               "customer": 1             操作的用户id
+#             }
+#         :return: {
+#             'status': 0/1,              返回状态  目前0失败，1成功
+#             'teacher_follower_id': 1    收藏id,
+#             'msg': '收藏失败'            失败时信息
+#         }
+#         """
+#         data = request.data
+#         serializer = self.get_serializer(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         params = serializer.validated_data
+#         customer = request.customer
+#         if not customer:
+#             raise TokenException('用户验证失败')
+#         params['customer'] = customer
+#         logger.info('start add teacher followers info %s' % params)
+#         teacher_follower_id, msg = teacher_models.TeacherFollowers.add_teacher_follower(**params)
+#         if teacher_follower_id:
+#             return Response({'status': 1, 'teacher_follower_id': teacher_follower_id})
+#         logger.info("add teacher follower error, is already exists. params: %s" % params)
+#         return Response({'status': 0, 'msg': msg})
+#
+#     def destroy(self, request, pk=None):
+#         """
+#             删除 教师 的收藏
+#         :param request:
+#         :param pk: 收藏id
+#         :return:
+#         """
+#         logger.info('start delete teacher follower %s' % pk)
+#         teacher_follower = teacher_models.TeacherFollowers.objects.get(id=pk)
+#         if request.customer != teacher_follower.customer:
+#             raise TokenException('用户验证失败')
+#         teacher_follower.delete_teacher_follower()
+#         logger.info('delete teacher follower %s success' % pk)
+#         return Response({'status': 1, 'teacher_id': pk})
+#
+#
+# class TeacherApplyViewset(viewsets.ModelViewSet):
+#     """
+#         申请教师
+#     """
+#
+#     def get_queryset(self):
+#         return teacher_models.TeacherApply.objects.filter(is_valid=True)
+#
+#     def get_serializer_class(self):
+#         """
+#             获取序列化
+#         :return:
+#         """
+#         if self.action == 'create':
+#             return teacher_serializers.CreateTeacherApplySerializer
+#         else:
+#             return teacher_serializers.CreateTeacherApplySerializer
+#
+#     def create(self, request, *args, **kwargs):
+#         """
+#             向 教师 发送申请
+#         :param request:
+#         :param args:
+#         :param kwargs:
+#         :return:
+#         """
+#         data = request.data
+#         customer = request.customer
+#
+#         return Response({})

@@ -172,67 +172,67 @@ class StudentViewset(viewsets.ModelViewSet):
         return Response(student_info)
 
 
-class StudentFollowerViewset(viewsets.ModelViewSet):
-    """
-        学生收藏api
-    """
-
-    def get_queryset(self):
-        return student_models.StudentFollowers.objects.filter(is_valid=True)
-
-    def get_serializer_class(self):
-        """
-            获取序列化
-        :return:
-        """
-        if self.action == 'create':
-            return student_serializers.CreateStudentFollowerSerializer
-        else:
-            return student_serializers.CreateStudentFollowerSerializer
-
-    def create(self, request, *args, **kwargs):
-        """
-            点击收藏学生          
-        :param request:         
-        :param args:           
-        :param kwargs:{                                
-              "student": 1,             被收藏学生id          
-              "customer": 1             操作的用户id          
-            }              
-        :return:{          
-            'status': 0/1,              返回状态  目前0失败，1成功          
-            'student_follower_id': 1    收藏id,           
-            'msg': '收藏失败'            失败时信息         
-        }            
-        """
-
-        data = request.data
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        params = serializer.validated_data
-        customer = request.customer
-        if not customer:
-            raise TokenException('用户验证失败')
-        params['customer'] = customer
-        logger.info('start add student followers info %s' % params)
-        student_follower_id, msg = student_models.StudentFollowers.add_student_follower(**params)
-        if student_follower_id:
-            return Response({'status': 1, 'student_follower_id': student_follower_id})
-        logger.info("add student follower error, is already exists. params: %s" % params)
-        return Response({'status': 0, 'msg': msg})
-
-    def destroy(self, request, pk=None):
-        """
-            删除 学生 的收藏
-        :param request:
-        :param pk: 收藏id
-        :return:
-        """
-        logger.info('start delete student follower %s' % pk)
-        student_follower = student_models.StudentFollowers.objects.get(id=pk)
-        if request.customer != student_follower.customer:
-            raise TokenException('用户验证失败')
-        student_follower.delete_student_follower()
-        logger.info('delete student follower %s success' % pk)
-        return Response({'status': 1, 'teacher_id': pk})
+# class StudentFollowerViewset(viewsets.ModelViewSet):
+#     """
+#         学生收藏api
+#     """
+#
+#     def get_queryset(self):
+#         return student_models.StudentFollowers.objects.filter(is_valid=True)
+#
+#     def get_serializer_class(self):
+#         """
+#             获取序列化
+#         :return:
+#         """
+#         if self.action == 'create':
+#             return student_serializers.CreateStudentFollowerSerializer
+#         else:
+#             return student_serializers.CreateStudentFollowerSerializer
+#
+#     def create(self, request, *args, **kwargs):
+#         """
+#             点击收藏学生
+#         :param request:
+#         :param args:
+#         :param kwargs:{
+#               "student": 1,             被收藏学生id
+#               "customer": 1             操作的用户id
+#             }
+#         :return:{
+#             'status': 0/1,              返回状态  目前0失败，1成功
+#             'student_follower_id': 1    收藏id,
+#             'msg': '收藏失败'            失败时信息
+#         }
+#         """
+#
+#         data = request.data
+#         serializer = self.get_serializer(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         params = serializer.validated_data
+#         customer = request.customer
+#         if not customer:
+#             raise TokenException('用户验证失败')
+#         params['customer'] = customer
+#         logger.info('start add student followers info %s' % params)
+#         student_follower_id, msg = student_models.StudentFollowers.add_student_follower(**params)
+#         if student_follower_id:
+#             return Response({'status': 1, 'student_follower_id': student_follower_id})
+#         logger.info("add student follower error, is already exists. params: %s" % params)
+#         return Response({'status': 0, 'msg': msg})
+#
+#     def destroy(self, request, pk=None):
+#         """
+#             删除 学生 的收藏
+#         :param request:
+#         :param pk: 收藏id
+#         :return:
+#         """
+#         logger.info('start delete student follower %s' % pk)
+#         student_follower = student_models.StudentFollowers.objects.get(id=pk)
+#         if request.customer != student_follower.customer:
+#             raise TokenException('用户验证失败')
+#         student_follower.delete_student_follower()
+#         logger.info('delete student follower %s success' % pk)
+#         return Response({'status': 1, 'teacher_id': pk})
 

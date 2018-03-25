@@ -106,13 +106,13 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# 学生被收藏序列化
-
-class CreateStudentFollowerSerializer(serializers.ModelSerializer):
-    """
-        收藏学生
-    """
-
-    class Meta:
-        model = models.StudentFollowers
-        fields = ('student', 'created_at', 'updated_at')
+# # 学生被收藏序列化
+#
+# class CreateStudentFollowerSerializer(serializers.ModelSerializer):
+#     """
+#         收藏学生
+#     """
+#
+#     class Meta:
+#         model = models.StudentFollowers
+#         fields = ('student', 'created_at', 'updated_at')

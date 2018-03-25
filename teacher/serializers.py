@@ -92,25 +92,25 @@ class UpdateTeacherSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# 教师被收藏序列化
-
-class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
-    """
-        收藏 教师
-    """
-
-    class Meta:
-        model = models.TeacherFollowers
-        fields = ('teacher', 'created_at', 'updated_at')
-
-
-# 教师被申请序列化
-
-class CreateTeacherApplySerializer(serializers.ModelSerializer):
-    """
-        申请 教师
-    """
-
-    class Meta:
-        model = models.TeacherApply
-        fields = '__all__'
+# # 教师被收藏序列化
+#
+# class CreateTeacherFollowerSerializer(serializers.ModelSerializer):
+#     """
+#         收藏 教师
+#     """
+#
+#     class Meta:
+#         model = models.TeacherFollowers
+#         fields = ('teacher', 'created_at', 'updated_at')
+#
+#
+# # 教师被申请序列化
+#
+# class CreateTeacherApplySerializer(serializers.ModelSerializer):
+#     """
+#         申请 教师
+#     """
+#
+#     class Meta:
+#         model = models.TeacherApply
+#         fields = '__all__'

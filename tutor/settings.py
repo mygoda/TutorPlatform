@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     "common",
     "customer",
     "teacher",
-    "student"
+    "student",
+    "operation"
 ]
 
 MIDDLEWARE = [
@@ -153,8 +154,8 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'utils.log_kit.MyLoggerHandler',
             'filename': os.path.join(LOG_DIR, 'debug.log'),
-            'when': 'D', # 1day
-            'backupCount': 365,
+            'when': 'MONTH', # 1 月
+            'backupCount': 12,
             'formatter': 'verbose',
             'encoding': 'UTF-8'
         }
@@ -202,6 +203,11 @@ LOGGING = {
             'handlers': ['default', 'sentry'],
             'level': 'DEBUG',
             'propagate': True,
+        },
+        'operation': {
+            'handlers': ['default', 'sentry'],
+            'level': 'DEBUG',
+            'propagate': True,
         }
     }
 }
@@ -230,6 +236,7 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'common.utils.CustomPagination',
     'PAGE_SIZE': 20,
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
 }
 
 # token expire time

@@ -7,6 +7,7 @@ from django.db import models
 # Create your models here.
 
 from common import models as common_models
+from operation.models import CustomerFavorite, CustomerApply
 from student import const
 from common.const import Sex, FOLLOWER_TYPE, APPLY_TYPE
 from customer.models import Customer
@@ -63,10 +64,19 @@ class Student(common_models.CommonModel):
 
     @property
     def follower_count(self):
-        return self.studentfollowers_set.filter(is_valid=True).count()
+        """
+        收藏数
+        :return:
+        """
+        return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='student').count()
 
     def customer_is_follower(self, customer_id):
-        return self.studentfollowers_set.filter(is_valid=True, customer_id=customer_id).exists()
+        """
+            是否被浏览者收藏
+        :param customer_id:
+        :return:
+        """
+        return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='student', customer_id=customer_id).exists()
 
     @classmethod
     def add_student(cls, **kwargs):
@@ -75,9 +85,6 @@ class Student(common_models.CommonModel):
         :return:
         """
         customer = kwargs.get("customer")
-        # if not customer:
-        #     customer = Customer.add()
-        #     kwargs["customer"] = customer
         if customer.customer_type:
             return False, '用户已注册过角色'
 
@@ -179,61 +186,61 @@ class StudentTypesShip(common_models.CommonModel):
         return "%s:%s" % (self.student.uid, self.student_type.name)
 
 
-class StudentFollowers(common_models.CommonModel):
-    """
-        学生 被收藏关系表
-        目前仅支持老师收藏学生，学生之间不可以收藏
-    """
-
-    student = models.ForeignKey(Student, help_text=u"学生")
-    customer = models.ForeignKey(Customer, null=True, help_text=u"收藏用户")
-    follower_type = models.IntegerField(u"收藏者类型，目前学生仅能被教师收藏", default=FOLLOWER_TYPE.TEACHER, help_text="1：老师 2：学生")
-    is_valid = models.BooleanField(u"是否有效", default=True)
-
-    class Meta:
-        verbose_name = u'被收藏学生'
-        verbose_name_plural = verbose_name
-
-    @classmethod
-    def add_student_follower(cls, **kwargs):
-        """
-            点击收藏学生
-        :return:
-        """
-        msg = ''
-        student = kwargs.get("student")
-        customer = kwargs.get("customer")
-        if customer.customer_type != 1:
-            msg = '仅教师才能收藏学生'
-            return False, msg
-        if not cls.objects.filter(is_valid=True, student=student, customer=customer).exists():
-            student_follower = StudentFollowers(**kwargs)
-            student_follower.save(force_insert=True)
-            return student_follower.id, msg
-        msg = '不能重复收藏'
-        return False, msg
-
-    def delete_student_follower(self):
-        """
-            删除 学生 收藏
-        :return:
-        """
-        if self.is_valid:
-            self.is_valid = False
-            self.save()
-
-
-class StudentrApply(common_models.CommonModel):
-    """
-        老师 被申请列表
-        目前仅支持 学生向老师申请
-    """
-
-    student = models.ForeignKey(Student, help_text=u"学生")
-    customer = models.ForeignKey(Customer, null=True, help_text=u"申请者")
-    apply_type = models.IntegerField(u"申请者类型, 目前教师仅能被学生申请", default=APPLY_TYPE.TEACHER, help_text="1：老师 2：学生")
-    is_valid = models.BooleanField(u"是否有效", default=True)
-
-    class Meta:
-        verbose_name = u'老师被申请列表'
-        verbose_name_plural = verbose_name
+# class StudentFollowers(common_models.CommonModel):
+#     """
+#         学生 被收藏关系表
+#         目前仅支持老师收藏学生，学生之间不可以收藏
+#     """
+#
+#     student = models.ForeignKey(Student, help_text=u"学生")
+#     customer = models.ForeignKey(Customer, null=True, help_text=u"收藏用户")
+#     follower_type = models.IntegerField(u"收藏者类型，目前学生仅能被教师收藏", default=FOLLOWER_TYPE.TEACHER, help_text="1：老师 2：学生")
+#     is_valid = models.BooleanField(u"是否有效", default=True)
+#
+#     class Meta:
+#         verbose_name = u'被收藏学生'
+#         verbose_name_plural = verbose_name
+#
+#     @classmethod
+#     def add_student_follower(cls, **kwargs):
+#         """
+#             点击收藏学生
+#         :return:
+#         """
+#         msg = ''
+#         student = kwargs.get("student")
+#         customer = kwargs.get("customer")
+#         if customer.customer_type != 1:
+#             msg = '仅教师才能收藏学生'
+#             return False, msg
+#         if not cls.objects.filter(is_valid=True, student=student, customer=customer).exists():
+#             student_follower = StudentFollowers(**kwargs)
+#             student_follower.save(force_insert=True)
+#             return student_follower.id, msg
+#         msg = '不能重复收藏'
+#         return False, msg
+#
+#     def delete_student_follower(self):
+#         """
+#             删除 学生 收藏
+#         :return:
+#         """
+#         if self.is_valid:
+#             self.is_valid = False
+#             self.save()
+#
+#
+# class StudentrApply(common_models.CommonModel):
+#     """
+#         老师 被申请列表
+#         目前仅支持 学生向老师申请
+#     """
+#
+#     student = models.ForeignKey(Student, help_text=u"学生")
+#     customer = models.ForeignKey(Customer, null=True, help_text=u"申请者")
+#     apply_type = models.IntegerField(u"申请者类型, 目前教师仅能被学生申请", default=APPLY_TYPE.TEACHER, help_text="1：老师 2：学生")
+#     is_valid = models.BooleanField(u"是否有效", default=True)
+#
+#     class Meta:
+#         verbose_name = u'老师被申请列表'
+#         verbose_name_plural = verbose_name

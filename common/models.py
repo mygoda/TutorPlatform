@@ -187,7 +187,6 @@ class Reason(CommonModel):
     """
     name = models.CharField(u"原因", max_length=64)
     type = models.IntegerField(u'投诉对象', default=OBJ_TYPE.OUR, help_text='0: 平台 1: 教师 2: 学生')
-    checked = models.BooleanField(u"是否选中", default=False)
 
     class Meta:
         verbose_name = u'原因'

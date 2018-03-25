@@ -22,6 +22,7 @@ from rest_framework import routers
 
 from common import views as common_views
 from customer import views as customer_views
+from operation import views as operation_views
 from student import views as student_views
 from teacher import views as teacher_views
 
@@ -48,10 +49,12 @@ router.register(r"help", common_views.UseHelpViewset, base_name="help_api")
 # customer api
 router.register(r"customer", customer_views.CustomerViewset, base_name="customer_api")
 router.register(r"suggestion", customer_views.CustomerSuggestionViewset, base_name="suggestion_api")
+# operation api
+router.register(r"favorite", operation_views.CustomerFavoriteViewset, base_name="favorite_api")
 # student api
 router.register(r"students", student_views.StudentViewset, base_name="student_api")
-router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")
-router.register(r"follower/teacher", teacher_views.TeacherFollowerViewset, base_name="follower_teacher_api")
+# router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")
+# router.register(r"follower/teacher", teacher_views.TeacherFollowerViewset, base_name="follower_teacher_api")
 # teacher api
 router.register(r"teacher", teacher_views.TeacherViewset, base_name="teacher_api")
 
