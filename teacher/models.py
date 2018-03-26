@@ -165,11 +165,7 @@ class TeacherSubjectsShip(common_models.CommonModel):
 
     @property
     def subject_name(self):
-        return [self.subject.name]
-
-    @property
-    def subject_id(self):
-        return [self.subject.id]
+        return self.subject.name
 
 
 class TeacherConfirm(common_models.CommonModel):
@@ -194,10 +190,6 @@ class TeacherTypesShip(common_models.CommonModel):
     @property
     def teacher_type_name(self):
         return [self.teacher_type.name]
-
-    @property
-    def teacher_type_id(self):
-        return [self.teacher_type.id]
 
 
 # class TeacherFollowers(common_models.CommonModel):

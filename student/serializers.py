@@ -12,7 +12,6 @@ class StudentSubjectSerializer(serializers.ModelSerializer):
     """教师学科"""
 
     subject_name = serializers.CharField()
-    subject_id = serializers.CharField()
 
     class Meta:
         model = models.StudentSubjectsShip
@@ -23,7 +22,6 @@ class StudentTypeSerializer(serializers.ModelSerializer):
     """ 学生的不足"""
 
     student_type_name = serializers.CharField()
-    student_type_id = serializers.CharField()
 
     class Meta:
         model = models.StudentTypesShip
@@ -34,7 +32,6 @@ class StudentTeacherTypeSerializer(serializers.ModelSerializer):
     """学生对教室要求 教师特点"""
 
     teacher_type_name = serializers.CharField()
-    teacher_type_id = serializers.CharField()
 
     class Meta:
         model = models.StudentTeacherTypes
