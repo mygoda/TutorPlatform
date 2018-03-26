@@ -66,6 +66,14 @@ class CustomerFavorite(common_models.CommonModel):
         """
         return self.get_target_obj().is_valid
 
+    @property
+    def target_money(self):
+        """
+            收藏对象  是否有效
+        :return:
+        """
+        return self.get_target_obj().money
+
     @classmethod
     def add_favorite(cls, **kwargs):
         """
