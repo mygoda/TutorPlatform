@@ -189,7 +189,7 @@ class TeacherTypesShip(common_models.CommonModel):
 
     @property
     def teacher_type_name(self):
-        return [self.teacher_type.name]
+        return self.teacher_type.name
 
 
 # class TeacherFollowers(common_models.CommonModel):

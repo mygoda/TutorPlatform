@@ -167,7 +167,7 @@ class StudentSubjectsShip(common_models.CommonModel):
 
     @property
     def subject_name(self):
-        return [self.subject.name]
+        return self.subject.name
 
 
 class StudentTeacherTypes(common_models.CommonModel):
@@ -183,7 +183,7 @@ class StudentTeacherTypes(common_models.CommonModel):
 
     @property
     def teacher_type_name(self):
-        return [self.teacher_type.name]
+        return self.teacher_type.name
 
 
 class StudentTypesShip(common_models.CommonModel):
@@ -196,7 +196,7 @@ class StudentTypesShip(common_models.CommonModel):
 
     @property
     def student_type_name(self):
-        return [self.student_type.name]
+        return self.student_type.name
 
 
 # class StudentFollowers(common_models.CommonModel):
