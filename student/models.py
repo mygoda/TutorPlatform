@@ -28,6 +28,7 @@ class Student(common_models.CommonModel):
     times = models.CharField(u"补习次数", default="一周一次", max_length=64, help_text="1：一周一次， 2：一周2次，依次内推，最大7次, 0: 面议")
     money = models.CharField(u"金钱", max_length=12, default="面议")
     sex = models.IntegerField(u"性别", default=Sex.WOMEN, help_text="0：女 1：男")
+    head_image = models.CharField(u"头像", max_length=255, null=True, blank=True)
 
     # 对老师的要求
     require = models.ForeignKey(common_models.TeacherRequire, default=1, verbose_name="教师资质")

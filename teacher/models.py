@@ -34,6 +34,10 @@ class Teacher(common_models.CommonModel):
         return "%s老师" % self.last_name
 
     @property
+    def learn_name(self):
+        return self.learn.name
+
+    @property
     def subjects(self):
         return self.teachersubjectsship_set.all()
 

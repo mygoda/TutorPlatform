@@ -36,6 +36,7 @@ class TeacherSerializer(common_serializer.CommonSerializer):
     teacher_types = TeacherTypeSerializer(many=True)
     follower_count = serializers.IntegerField()
     confirms = serializers.ListField(required=True)
+    learn_name = serializers.CharField()
 
     class Meta:
         model = models.Teacher
