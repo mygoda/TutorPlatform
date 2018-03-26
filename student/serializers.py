@@ -11,31 +11,34 @@ from common import serializers as common_serializer
 class StudentSubjectSerializer(serializers.ModelSerializer):
     """教师学科"""
 
-    subject = common_serializer.SubjectSerializer()
+    subject_name = serializers.CharField()
+    subject_id = serializers.CharField()
 
     class Meta:
         model = models.StudentSubjectsShip
-        fields = ("id", "subject")
+        fields = ("id", "subject_name", "subject_id")
 
 
 class StudentTypeSerializer(serializers.ModelSerializer):
     """ 学生的不足"""
 
-    student_type = common_serializer.StudentTypeSerializer()
+    student_type_name = serializers.CharField()
+    student_type_id = serializers.CharField()
 
     class Meta:
         model = models.StudentTypesShip
-        fields = ("id", "student_type")
+        fields = ("id", "student_type_name", "student_type_id")
 
 
 class StudentTeacherTypeSerializer(serializers.ModelSerializer):
     """学生对教室要求 教师特点"""
 
-    teacher_type = common_serializer.TeacherTypeSerializer()
+    teacher_type_name = serializers.CharField()
+    teacher_type_id = serializers.CharField()
 
     class Meta:
         model = models.StudentTeacherTypes
-        fields = ("id", "teacher_type")
+        fields = ("id", "teacher_type_name", "teacher_type_id")
 
 
 class StudentSerializer(common_serializer.CommonSerializer):

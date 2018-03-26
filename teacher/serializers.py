@@ -11,21 +11,23 @@ from common import serializers as common_serializer
 class TeacherSubjectSerializer(serializers.ModelSerializer):
     """教师学科"""
 
-    subject = common_serializer.SubjectSerializer()
+    subject_name = serializers.CharField()
+    subject_id = serializers.CharField()
 
     class Meta:
         model = models.TeacherSubjectsShip
-        fields = ("id", "subject")
+        fields = ("id", "subject_name", "subject_id")
 
 
 class TeacherTypeSerializer(serializers.ModelSerializer):
     """教师特点"""
 
-    teacher_type = common_serializer.TeacherTypeSerializer()
+    teacher_type_name = serializers.CharField()
+    teacher_type_id = serializers.CharField()
 
     class Meta:
         model = models.TeacherTypesShip
-        fields = ("id", "teacher_type")
+        fields = ("id", "teacher_type_name", "teacher_type_id")
 
 
 class TeacherSerializer(common_serializer.CommonSerializer):
