@@ -35,6 +35,7 @@ class TeacherSerializer(common_serializer.CommonSerializer):
     subjects = TeacherSubjectSerializer(many=True)
     teacher_types = TeacherTypeSerializer(many=True)
     follower_count = serializers.IntegerField()
+    apply_count = serializers.IntegerField()
     confirms = serializers.ListField(required=True)
     learn_name = serializers.CharField()
 

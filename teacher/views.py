@@ -172,6 +172,7 @@ class TeacherViewset(viewsets.ModelViewSet):
         serializer = teacher_serializers.TeacherSerializer(teacher)
         teacher_info = serializer.data
         teacher_info['customer_is_follower'] = teacher.customer_is_follower(customer_id=customer.id)
+        teacher_info['customer_is_apply'] = teacher.customer_is_apply(customer_id=customer.id)
         return Response(teacher_info)
 
 

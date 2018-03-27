@@ -49,6 +49,7 @@ class StudentSerializer(common_serializer.CommonSerializer):
     student_types = StudentTypeSerializer(many=True)
     teacher_types = StudentTeacherTypeSerializer(many=True)
     follower_count = serializers.IntegerField()
+    apply_count = serializers.IntegerField()
     created_time = serializers.CharField()
     updated_time = serializers.CharField()
 
