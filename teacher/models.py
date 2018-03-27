@@ -152,7 +152,8 @@ class Teacher(common_models.CommonModel):
         :return:
         """
         subjects = kwargs.pop('subjects', [])
-        # teacher_types = kwargs.pop('teacher_types', [])
+        teacher_types = kwargs.pop('teacher_types', [])
+        confirms = kwargs.pop('confirms', [])
         # 添加教师 所教 科目,添加前删除以前的
         if subjects:
             self.teachersubjectsship_set.all().delete()
@@ -162,6 +163,24 @@ class Teacher(common_models.CommonModel):
                 subject["subject_id"] = int(id)
                 teacher_subject = TeacherSubjectsShip(**subject)
                 teacher_subject.save()
+
+            # 添加教师 教学特点
+            self.teachertypesship_set.all().delete()
+            for id in teacher_types:
+                teacher_type = {}
+                teacher_type["teacher"] = self
+                teacher_type["teacher_type_id"] = int(id)
+                teacher_type_ship = TeacherTypesShip(**teacher_type)
+                teacher_type_ship.save()
+
+            # 添加教师 证书
+            self.teacherconfirm_set.all().delete()
+            for id in confirms:
+                confirm = {}
+                confirm["teacher"] = self
+                confirm["confirm"] = id
+                teacher_confirm = TeacherConfirm(**confirm)
+                teacher_confirm.save()
         # if teacher_types:
         Teacher.objects.filter(id=self.id).update(**kwargs)
 

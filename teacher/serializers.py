@@ -88,6 +88,7 @@ class UpdateTeacherSerializer(serializers.ModelSerializer):
     school = serializers.CharField(required=False)
     subjects = serializers.ListField(required=False)
     teacher_types = serializers.ListField(required=False)
+    confirms = serializers.ListField(required=False)
 
     class Meta:
         model = models.Teacher
