@@ -39,7 +39,7 @@ class Teacher(common_models.CommonModel):
 
     @property
     def subjects(self):
-        return self.teachersubjectsship_set.all()
+        return [{'id': subject.subject.id, 'name': subject.subject.name, 'checked': True} for subject in self.teachersubjectsship_set.all()]
 
     @property
     def confirms(self):
@@ -47,7 +47,9 @@ class Teacher(common_models.CommonModel):
 
     @property
     def teacher_types(self):
-        return self.teachertypesship_set.all()
+        return [{'id': teacher_type.teacher_type.id, 'name': teacher_type.teacher_type.name, 'checked': True} for
+                teacher_type in
+                self.teachertypesship_set.all()]
 
     @property
     def follower_count(self):

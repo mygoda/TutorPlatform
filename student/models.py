@@ -53,15 +53,17 @@ class Student(common_models.CommonModel):
 
     @property
     def subjects(self):
-        return self.studentsubjectsship_set.all()
+        return [{'id': subject.subject.id, 'name': subject.subject.name, 'checked': True} for subject in self.studentsubjectsship_set.all()]
 
     @property
     def student_types(self):
-        return self.studenttypesship_set.all()
+        return [{'id': student_type.student_type.id, 'name': student_type.student_type.name, 'checked': True} for student_type in
+                self.studenttypesship_set.all()]
 
     @property
     def teacher_types(self):
-        return self.studentteachertypes_set.all()
+        return [{'id': teacher_type.teacher_type.id, 'name': teacher_type.teacher_type.name, 'checked': True} for teacher_type in
+                self.studentteachertypes_set.all()]
 
     @property
     def follower_count(self):

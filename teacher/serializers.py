@@ -32,8 +32,8 @@ class TeacherSerializer(common_serializer.CommonSerializer):
 
     city = common_serializer.CitySerializer()
     school = common_serializer.SchoolSerializer()
-    subjects = TeacherSubjectSerializer(many=True)
-    teacher_types = TeacherTypeSerializer(many=True)
+    subjects = serializers.ListField()
+    teacher_types = serializers.ListField()
     follower_count = serializers.IntegerField()
     apply_count = serializers.IntegerField()
     confirms = serializers.ListField(required=True)

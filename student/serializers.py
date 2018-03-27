@@ -41,13 +41,13 @@ class StudentTeacherTypeSerializer(serializers.ModelSerializer):
 class StudentSerializer(common_serializer.CommonSerializer):
 
     city = common_serializer.CitySerializer()
-    subjects = StudentSubjectSerializer(many=True)
+    subjects = serializers.ListField()
     level = common_serializer.LevelSerializer()
     basis = common_serializer.BasisSerializer()
     baselevel = common_serializer.BaseSchoolSerializer()
     require = common_serializer.TeacherRequireSerializer()
-    student_types = StudentTypeSerializer(many=True)
-    teacher_types = StudentTeacherTypeSerializer(many=True)
+    student_types = serializers.ListField()
+    teacher_types = serializers.ListField()
     follower_count = serializers.IntegerField()
     apply_count = serializers.IntegerField()
     created_time = serializers.CharField()
