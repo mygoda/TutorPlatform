@@ -77,7 +77,7 @@ class Teacher(common_models.CommonModel):
         return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='teacher', customer_id=customer_id).exists()
 
     def customer_is_apply(self, customer_id):
-        return CustomerFavorite.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='teacher', target_customer_id=customer_id).exists()
+        return CustomerApply.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='teacher', target_customer_id=customer_id).exists()
 
     @classmethod
     def add_teacher(cls, **kwargs):
