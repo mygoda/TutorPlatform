@@ -100,6 +100,8 @@ class UpdateStudentSerializer(serializers.ModelSerializer):
     level = serializers.CharField(required=False)
     baselevel = serializers.CharField(required=False)
     subjects = serializers.ListField(required=False)
+    teacher_types = serializers.ListField(required=False)
+    student_types = serializers.ListField(required=False)
     address = serializers.CharField(required=False)
 
     class Meta:

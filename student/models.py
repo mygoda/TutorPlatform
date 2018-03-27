@@ -159,6 +159,9 @@ class Student(common_models.CommonModel):
         :return:
         """
         subjects = kwargs.pop('subjects', [])
+        teacher_types = kwargs.pop('teacher_types', [])
+        student_types = kwargs.pop('student_types', [])
+
         if subjects:
             self.studentsubjectsship_set.all().delete()
             for id in subjects:
@@ -167,6 +170,24 @@ class Student(common_models.CommonModel):
                 subject["subject_id"] = int(id)
                 student_subject = StudentSubjectsShip(**subject)
                 student_subject.save()
+
+            # 添加学生对教师的要求 教学特点
+            self.studentteachertypes_set.all().delete()
+            for id in teacher_types:
+                teacher_type = {}
+                teacher_type["student"] = self
+                teacher_type["teacher_type_id"] = id
+                teacher_type_ship = StudentTeacherTypes(**teacher_type)
+                teacher_type_ship.save()
+
+            # 添加学生的不足 学生不足
+            self.studenttypesship_set.all().delete()
+            for id in student_types:
+                student_type = {}
+                student_type["student"] = self
+                student_type["student_type_id"] = id
+                student_type_ship = StudentTypesShip(**student_type)
+                student_type_ship.save()
         Student.objects.filter(id=self.id).update(**kwargs)
 
 
