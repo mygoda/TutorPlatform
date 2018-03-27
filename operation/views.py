@@ -96,4 +96,86 @@ class CustomerFavoriteViewset(viewsets.ModelViewSet):
         return Response({'status': 1, 'id': pk})
 
 
+class CustomerApplyViewset(viewsets.ModelViewSet):
+    """
+        用户申请 api
+    """
+
+    def get_queryset(self):
+        return operation_models.CustomerApply.objects.filter(is_valid=True)
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return operation_serializers.CustomerApplySerializer
+        elif self.action == 'list':
+            return operation_serializers.GetCustomerApplySerializer
+        else:
+            return operation_serializers.CustomerApplySerializer
+
+    def create(self, request, *args, **kwargs):
+        """
+            增加 申请
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        data = request.data
+        customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        params = serializer.validated_data
+        params['customer'] = customer
+        logger.info("customer %s add apply params %s" % (customer.id, params))
+        fav_id, msg = operation_models.CustomerApply.add_apply(**params)
+        if fav_id:
+            return Response({'status': 1, 'fav_id': fav_id})
+        logger.info("add apply error %s params: %s" % (msg, params))
+        return Response({'status': 0, 'msg': msg})
+
+    def list(self, request, *args, **kwargs):
+        """
+            获取用户申请列表
+        :param request:
+        :param args:
+        :param kwargs:{
+	        "target_id": 6,
+	        "target_type": "student"
+        }
+        :return:
+        """
+        customer = request.customer
+        if not customer:
+            raise TokenException('用户验证失败')
+        queryset = self.get_queryset()
+        if customer.customer_type == 1:
+            # 当用户角色为教师时，获取向自己申请的学生
+            queryset = queryset.filter(customer_apply_id=customer.id, target_type='student')
+        elif customer.customer_type == 2:
+            # 当用户角色为学生时，获取向自己申请的教师
+            queryset = queryset.filter(customer_apply_id=customer.id, target_type='teacher')
+        else:
+            # 用户为注册
+            return Response({'status': 0, 'msg': '用户未注册'})
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        """
+            删除 收藏
+        :param request:
+        :param pk: 收藏id
+        :return:
+        """
+        logger.info('start delete customer apply %s' % pk)
+        customer_apply = operation_models.CustomerApply.objects.get(id=pk)
+        if request.customer != customer_apply.customer_apply:
+            raise TokenException('用户验证失败')
+        customer_apply.delete_apply()
+        logger.info('customer %s delete apply %s success' % (customer_apply.customer_apply_id, pk))
+        return Response({'status': 1, 'id': pk})
+
+
 

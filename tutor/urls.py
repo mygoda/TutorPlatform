@@ -51,6 +51,7 @@ router.register(r"customer", customer_views.CustomerViewset, base_name="customer
 router.register(r"suggestion", customer_views.CustomerSuggestionViewset, base_name="suggestion_api")
 # operation api
 router.register(r"favorite", operation_views.CustomerFavoriteViewset, base_name="favorite_api")
+router.register(r"apply", operation_views.CustomerApplyViewset, base_name="apply_api")
 # student api
 router.register(r"students", student_views.StudentViewset, base_name="student_api")
 # router.register(r"follower/student", student_views.StudentFollowerViewset, base_name="follower_student_api")

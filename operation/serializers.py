@@ -40,3 +40,17 @@ class CustomerApplySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class GetCustomerApplySerializer(serializers.ModelSerializer):
+    """
+        获取用户收藏 序列化
+    """
+
+    target_name = serializers.CharField()
+    target_subject = serializers.ListField()
+    target_is_valid = serializers.CharField()
+    target_money = serializers.CharField()
+
+    class Meta:
+        model = models.CustomerApply
+        fields = '__all__'
+
