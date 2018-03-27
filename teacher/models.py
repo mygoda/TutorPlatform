@@ -56,7 +56,14 @@ class Teacher(common_models.CommonModel):
         :return:
         """
         return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='teacher').count()
-        # return self.teacherfollowers_set.filter(is_valid=True).count()
+
+    @property
+    def apply_count(self):
+        """
+            申请数
+        :return:
+        """
+        return CustomerApply.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='teacher').count()
 
     def followers(self):
         """
@@ -68,7 +75,9 @@ class Teacher(common_models.CommonModel):
 
     def customer_is_follower(self, customer_id):
         return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='teacher', customer_id=customer_id).exists()
-        # return self.teacherfollowers_set.filter(is_valid=True, customer_id=customer_id).exists()
+
+    def customer_is_apply(self, customer_id):
+        return CustomerFavorite.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='teacher', target_customer_id=customer_id).exists()
 
     @classmethod
     def add_teacher(cls, **kwargs):

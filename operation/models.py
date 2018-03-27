@@ -125,12 +125,13 @@ class CustomerApply(common_models.CommonModel):
     """
         用户的申请
     """
+    target_customer_id = models.IntegerField(null=True, blank=True, verbose_name=u'申请者用户id')
     customer_apply = models.ForeignKey(customer_models.Customer, null=True, blank=True, verbose_name=u'申请对象用户')
     target_id = models.IntegerField(default=0, verbose_name=u'申请者id')
     target_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请者类型')
     is_valid = models.BooleanField(u"是否有效", default=True)
     apply_obj_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请对象当时身份')
-    apply_obj_type_id = models.IntegerField(default=0, verbose_name=u'申请对象当时身份id')
+    apply_obj_type_id = models.IntegerField(default=0, verbose_name=u'申请对象当时身份id, 教师 or 学生')
 
     class Meta:
         verbose_name = u'用户申请'
@@ -224,6 +225,7 @@ class CustomerApply(common_models.CommonModel):
                                   target_id=target_id,
                                   apply_obj_type=apply_obj_type,
                                   apply_obj_type_id=apply_obj_type_id).exists():
+            kwargs['target_customer_id'] = customer.id
             apply = cls(**kwargs)
             apply.customer_apply_id = apply.get_apply_obj().customer_id
             apply.save(force_insert=True)
