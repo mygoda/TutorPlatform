@@ -125,13 +125,14 @@ class CustomerApply(common_models.CommonModel):
     """
         用户的申请
     """
-    target_customer_id = models.IntegerField(null=True, blank=True, verbose_name=u'申请者用户id')
-    customer_apply = models.ForeignKey(customer_models.Customer, null=True, blank=True, verbose_name=u'申请对象用户')
-    target_id = models.IntegerField(default=0, verbose_name=u'申请者id')
-    target_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请者类型')
+
+    target_customer = models.ForeignKey(customer_models.Customer, null=True, blank=True, verbose_name=u'申请对象用户')
+    target_id = models.IntegerField(default=0, verbose_name=u'申请对象id')
+    target_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请对象类型')
     is_valid = models.BooleanField(u"是否有效", default=True)
-    apply_obj_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请对象当时身份')
-    apply_obj_type_id = models.IntegerField(default=0, verbose_name=u'申请对象当时身份id, 教师 or 学生')
+    apply_type = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'申请者当时身份')
+    apply_type_id = models.IntegerField(default=0, verbose_name=u'申请者当时身份id, 教师 or 学生')
+    apply_customer_id = models.IntegerField(null=True, blank=True, verbose_name=u'申请者用户id')
 
     class Meta:
         verbose_name = u'用户申请'
@@ -143,7 +144,7 @@ class CustomerApply(common_models.CommonModel):
             申请者 name
         :return:
         """
-        target_obj = self.get_target_obj()
+        target_obj = self.get_apply_obj()
         if target_obj.customer.customer_type == 1:
             return target_obj.last_name
         elif target_obj.customer.customer_type == 2:
@@ -155,7 +156,7 @@ class CustomerApply(common_models.CommonModel):
          申请者  科目
         :return:
         """
-        target_obj = self.get_target_obj()
+        target_obj = self.get_apply_obj()
         if target_obj.customer.customer_type == 1:
             return [subject.subject.name for subject in target_obj.teachersubjectsship_set.all()]
         elif target_obj.customer.customer_type == 2:
@@ -167,7 +168,7 @@ class CustomerApply(common_models.CommonModel):
             申请对象  是否有效
         :return:
         """
-        return self.get_target_obj().is_valid
+        return self.get_apply_obj().is_valid
 
     @property
     def target_money(self):
@@ -175,14 +176,14 @@ class CustomerApply(common_models.CommonModel):
             收藏对象  是否有效
         :return:
         """
-        return self.get_target_obj().money
+        return self.get_apply_obj().money
 
     def get_apply_model(self):
         """
             获取 申请 目标 model
         :return:
         """
-        taget = ContentType.objects.get(model=self.apply_obj_type)
+        taget = ContentType.objects.get(model=self.apply_type)
         return taget.model_class()
 
     def get_apply_obj(self):
@@ -191,7 +192,7 @@ class CustomerApply(common_models.CommonModel):
         :return:
         """
         model = self.get_apply_model()
-        obj = model.objects.get(id=self.apply_obj_type_id)
+        obj = model.objects.get(id=self.apply_type_id)
         return obj
 
     @classmethod
@@ -205,29 +206,29 @@ class CustomerApply(common_models.CommonModel):
         target_type = kwargs.get("target_type")
         target_id = kwargs.get("target_id")
 
-        apply_obj_type = kwargs.get("apply_obj_type")
-        apply_obj_type_id = kwargs.get("apply_obj_type_id")
+        # apply_type = kwargs.get("apply_obj_type")
+        # apply_type_id = kwargs.get("apply_obj_type_id")
         # 判断用户身份能否申请
         check = CHECK_FAV.get(customer.customer_type)
-        if apply_obj_type not in TARGET_TYPE or check[0] != apply_obj_type:
+        if target_type not in TARGET_TYPE or check[0] != target_type:
             msg = check[-1]
             return False, msg
 
         if customer.customer_type == 1:
-            if target_type != 'teacher' or target_id != customer.teacher_set.filter(is_valid=True).first().id:
-                return False, '申请者身份不匹配'
+            apply_type_id = customer.teacher_set.filter(is_valid=True).first().id
+            apply_type = 'teacher'
         elif customer.customer_type == 2:
-            if target_type != 'student' or target_id != customer.student_set.filter(is_valid=True).first().id:
-                return False, '申请者身份不匹配'
+            apply_type_id = customer.student_set.filter(is_valid=True).first().id
+            apply_type = 'student'
 
         if not cls.objects.filter(is_valid=True,
                                   target_type=target_type,
                                   target_id=target_id,
-                                  apply_obj_type=apply_obj_type,
-                                  apply_obj_type_id=apply_obj_type_id).exists():
+                                  apply_type=apply_type,
+                                  apply_type_id=apply_type_id).exists():
             kwargs['target_customer_id'] = customer.id
             apply = cls(**kwargs)
-            apply.customer_apply_id = apply.get_apply_obj().customer_id
+            apply.target_customer = apply.get_target_obj().customer_id
             apply.save(force_insert=True)
             return apply.id, msg
         msg = '不能重复申请'

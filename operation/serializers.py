@@ -52,5 +52,5 @@ class GetCustomerApplySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CustomerApply
-        fields = '__all__'
+        fields = ('apply_type', 'apply_type_id','target_name', 'target_subject', 'target_is_valid', 'target_money')
 
