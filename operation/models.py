@@ -226,9 +226,9 @@ class CustomerApply(common_models.CommonModel):
                                   target_id=target_id,
                                   apply_type=apply_type,
                                   apply_type_id=apply_type_id).exists():
-            kwargs['target_customer_id'] = customer.id
+            kwargs['apply_customer_id'] = customer.id
             apply = cls(**kwargs)
-            apply.target_customer = apply.get_target_obj().customer_id
+            apply.target_customer_id = apply.get_target_obj().customer_id
             apply.save(force_insert=True)
             return apply.id, msg
         msg = '不能重复申请'
