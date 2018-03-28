@@ -28,8 +28,8 @@ CHECK_FAV = {
 
 CHECK_APPLY = {
     0: ['ours', '您尚未注册'],
-    1: ['student', '仅学生才能申请教师'],
-    2: ['teacher', '仅教师才能申请学生']
+    2: ['student', '仅学生才能申请教师'],
+    1: ['teacher', '仅教师才能申请学生']
 }
 
 
