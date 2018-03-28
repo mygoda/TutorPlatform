@@ -34,11 +34,11 @@ class Customer(common_models.CommonModel):
     @property
     def user_type(self):
         if self.customer_type == 1:
-            return '教师'
+            return 'teacher'
         elif self.customer_type == 2:
-            return '学生'
+            return 'student'
         else:
-            return '未注册'
+            return 'no'
 
     # @property
     # def user_favorites(self):
