@@ -79,7 +79,7 @@ class Student(common_models.CommonModel):
             申请数
         :return:
         """
-        return CustomerApply.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='student').count()
+        return CustomerApply.objects.filter(is_valid=True, target_id=self.id, target_type='student').count()
 
     def customer_is_follower(self, customer_id):
         """
@@ -90,7 +90,7 @@ class Student(common_models.CommonModel):
         return CustomerFavorite.objects.filter(is_valid=True, target_id=self.id, target_type='student', customer_id=customer_id).exists()
 
     def customer_is_apply(self, customer_id):
-        return CustomerApply.objects.filter(is_valid=True, apply_obj_type_id=self.id, apply_obj_type='student', target_customer_id=customer_id).exists()
+        return CustomerApply.objects.filter(is_valid=True, target_id=self.id, target_type='student', target_customer_id=customer_id).exists()
 
     @classmethod
     def add_student(cls, **kwargs):
