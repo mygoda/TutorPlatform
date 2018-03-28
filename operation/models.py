@@ -209,7 +209,7 @@ class CustomerApply(common_models.CommonModel):
         # apply_type = kwargs.get("apply_obj_type")
         # apply_type_id = kwargs.get("apply_obj_type_id")
         # 判断用户身份能否申请
-        check = CHECK_FAV.get(customer.customer_type)
+        check = CHECK_APPLY.get(customer.customer_type)
         if target_type not in TARGET_TYPE or check[0] != target_type:
             msg = check[-1]
             return False, msg
