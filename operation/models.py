@@ -28,8 +28,8 @@ CHECK_FAV = {
 
 CHECK_APPLY = {
     0: ['ours', '您尚未注册'],
-    2: ['student', '仅学生才能申请教师'],
-    1: ['teacher', '仅教师才能申请学生']
+    1: ['student', '仅学生才能申请教师'],
+    2: ['teacher', '仅教师才能申请学生']
 }
 
 
@@ -227,6 +227,8 @@ class CustomerApply(common_models.CommonModel):
                                   apply_type=apply_type,
                                   apply_type_id=apply_type_id).exists():
             kwargs['apply_customer_id'] = customer.id
+            kwargs['apply_type_id'] = apply_type_id
+            kwargs['apply_type'] = apply_type
             apply = cls(**kwargs)
             apply.target_customer_id = apply.get_target_obj().customer_id
             apply.save(force_insert=True)
